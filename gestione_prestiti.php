@@ -7,7 +7,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['user_type'] !== 'bibliotecario'
     exit();
 }
 
-$conn = connectDB();
+$db = open_pg_connection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['azione'], $_POST['cod_prestito'])) {
@@ -16,23 +16,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($azione === 'chiudi') {
             $query = "UPDATE biblioteca.prestito SET data_restituzione = CURRENT_DATE, prestito_aperto = FALSE WHERE cod_prestito = $1";
-            $stmt = pg_prepare($conn, "chiudi_prestito", $query);
-            $result = pg_execute($conn, "chiudi_prestito", array($cod_prestito));
-
+            $result = pg_prepare($db, "chiudi_prestito", $query);
             if ($result) {
-                $_SESSION['message'] = "Prestito chiuso con successo.";
+                $result = pg_execute($db, "chiudi_prestito", array($cod_prestito));
+
+                if ($result) {
+                    $_SESSION['message'] = "Prestito chiuso con successo.";
+                } else {
+                    $_SESSION['error'] = "Errore nella chiusura del prestito.";
+                }
             } else {
-                $_SESSION['error'] = "Errore nella chiusura del prestito.";
+                $_SESSION['error'] = "Errore nella preparazione della query.";
             }
         }
     }
 }
 
 $query = "SELECT * FROM biblioteca.prestiti_aperti";
-$result = pg_query($conn, $query);
-$prestiti_aperti = pg_fetch_all($result);
+$result = pg_query($db, $query);
+$prestiti_aperti = $result ? pg_fetch_all($result) : [];
 
-disconnectDB($conn);
+pg_free_result($result);
+close_pg_connection($db);
 ?>
 
 <!DOCTYPE html>
@@ -49,12 +54,12 @@ disconnectDB($conn);
         <h1>Gestione Prestiti</h1>
 
         <?php if (isset($_SESSION['message'])): ?>
-            <div class="success-message"> <?= $_SESSION['message'] ?> </div>
+            <div class="success-message"> <?= htmlspecialchars($_SESSION['message']) ?> </div>
             <?php unset($_SESSION['message']); ?>
         <?php endif; ?>
 
         <?php if (isset($_SESSION['error'])): ?>
-            <div class="error-message"> <?= $_SESSION['error'] ?> </div>
+            <div class="error-message"> <?= htmlspecialchars($_SESSION['error']) ?> </div>
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
