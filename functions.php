@@ -1,79 +1,96 @@
 <?php
-// Funzioni aggiornate per la connessione e gestione del login
 
-define("MY_HOST", "postgres");
-define("MY_USER", "antonino_ottina");
-define("MY_PASSWORD", "Cermenate14@");
-define("MY_DB", "antonino_ottina_test1");
+define("myhost", "postgres");
+define("myuser", "antonino_ottina");
+define("mypsw", "Cermenate14@");
+define("mydb", "antonino_ottina_test1");
 
-/**
- * Apre la connessione al database PostgreSQL.
- * @return resource Connessione al database
- */
-function connectDB() {
-    $connectionString = "host=" . MY_HOST . " dbname=" . MY_DB . " user=" . MY_USER . " password=" . MY_PASSWORD;
-    $db = pg_connect($connectionString);
+/* Funzione per aprire la connessione con il database */
+function open_pg_connection() {
+    $connection = "host=" . myhost . " dbname=" . mydb . " user=" . myuser . " password=" . mypsw;
+    return pg_connect($connection);
+}
 
-    if (!$db) {
-        die("Errore di connessione al database.");
+/* Funzione di Login per il lettore */
+function login_lettore($email, $password) {
+    if (empty($email) || empty($password)) {
+        return null;
     }
 
-    return $db;
+    $logged = null;
+    $db = open_pg_connection();
+    try {
+        $sql = "SELECT cf_lettore FROM biblioteca.utente_lettore WHERE email = $1 AND password = $2";
+        $params = array($email, $password); // Assumiamo che la password sia già hashata
+
+        pg_prepare($db, "check_user_lettore", $sql);
+        $result = pg_execute($db, "check_user_lettore", $params);
+
+        if ($row = pg_fetch_assoc($result)) {
+            $logged = $row['cf_lettore'];
+        }
+    } finally {
+        close_pg_connection($db);
+    }
+    return $logged;
 }
 
-/**
- * Chiude la connessione al database PostgreSQL.
- * @param resource $db Connessione da chiudere
- */
-function disconnectDB($db) {
-    pg_close($db);
-}
-
-/**
- * Verifica il login per un lettore.
- * @param string $email Email del lettore
- * @param string $password Password del lettore
- * @return string|null Codice fiscale del lettore se valido, altrimenti null
- */
-function loginLettore($email, $password) {
-    $db = connectDB();
-
-    $query = "SELECT cf_lettore FROM biblioteca.utente_lettore WHERE email = $1 AND password = $2";
-    $params = array($email, md5($password));
-
-    $result = pg_query_params($db, $query, $params);
-
-    if ($result && pg_num_rows($result) > 0) {
-        $row = pg_fetch_assoc($result);
-        disconnectDB($db);
-        return $row['cf_lettore'];
+/* Funzione di Login per il bibliotecario */
+function login_bibliotecario($email, $password) {
+    if (empty($email) || empty($password)) {
+        return null;
     }
 
-    disconnectDB($db);
-    return null;
+    $logged = null;
+    $db = open_pg_connection();
+    try {
+        $sql = "SELECT email FROM biblioteca.utente_bibliotecario WHERE email = $1 AND password = $2";
+        $params = array($email, $password); // Assumiamo che la password sia già hashata
+
+        pg_prepare($db, "check_user_bibliotecario", $sql);
+        $result = pg_execute($db, "check_user_bibliotecario", $params);
+
+        if ($row = pg_fetch_assoc($result)) {
+            $logged = $row['email'];
+        }
+    } finally {
+        close_pg_connection($db);
+    }
+    return $logged;
 }
 
-/**
- * Verifica il login per un bibliotecario.
- * @param string $email Email del bibliotecario
- * @param string $password Password del bibliotecario
- * @return string|null Email del bibliotecario se valido, altrimenti null
- */
-function loginBibliotecario($email, $password) {
-    $db = connectDB();
-
-    $query = "SELECT email FROM biblioteca.utente_bibliotecario WHERE email = $1 AND password = $2";
-    $params = array($email, md5($password));
-
-    $result = pg_query_params($db, $query, $params);
-
-    if ($result && pg_num_rows($result) > 0) {
-        $row = pg_fetch_assoc($result);
-        disconnectDB($db);
-        return $row['email'];
+/* Funzione per cambiare la password */
+function cambia_password($email, $new_password) {
+    if (empty($email) || empty($new_password)) {
+        return false;
     }
 
-    disconnectDB($db);
-    return null;
+    $db = open_pg_connection();
+    try {
+        // Controlla se l'utente è un lettore o un bibliotecario
+        $query = "SELECT 'lettore' AS tipo FROM biblioteca.utente_lettore WHERE email = $1
+                  UNION
+                  SELECT 'bibliotecario' AS tipo FROM biblioteca.utente_bibliotecario WHERE email = $1";
+        pg_prepare($db, "check_user_type", $query);
+        $result = pg_execute($db, "check_user_type", array($email));
+
+        if ($row = pg_fetch_assoc($result)) {
+            $query = $row['tipo'] == 'lettore' ?
+                "UPDATE biblioteca.utente_lettore SET password = $1 WHERE email = $2" :
+                "UPDATE biblioteca.utente_bibliotecario SET password = $1 WHERE email = $2";
+
+            pg_prepare($db, "update_user", $query);
+            pg_execute($db, "update_user", array(md5($new_password), $email));
+            return true;
+        }
+    } finally {
+        close_pg_connection($db);
+    }
+    return false;
 }
 
+/* Funzione per chiudere la connessione con il database */
+function close_pg_connection($db) {
+    return pg_close($db);
+}
+?>
