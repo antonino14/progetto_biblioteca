@@ -6,12 +6,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    $bibliotecario = loginBibliotecario($email, $password);
+    // Verifica credenziali
+    $bibliotecario_email = login_bibliotecario($email, $password);
 
-    if ($bibliotecario) {
+    if ($bibliotecario_email) {
         $_SESSION['logged_in'] = true;
         $_SESSION['user_type'] = 'bibliotecario';
-        $_SESSION['email_bibliotecario'] = $bibliotecario;
+        $_SESSION['bibliotecario_email'] = $bibliotecario_email;
         header('Location: gestione_libri.php');
         exit();
     } else {
@@ -28,18 +29,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Login Bibliotecario</h1>
+    <h1>Accesso Bibliotecario</h1>
     <?php if (isset($error_message)): ?>
         <p class="error"> <?= htmlspecialchars($error_message) ?> </p>
     <?php endif; ?>
-    <form method="POST" action="">
+    <form method="POST">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
+
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
+
         <button type="submit">Accedi</button>
     </form>
-    <a href="welcome.php">Torna alla pagina principale</a>
 </body>
 </html>
-
