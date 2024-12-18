@@ -1,15 +1,14 @@
 <?php
-
 require_once 'functions.php';
 session_start();
 
 // Verifica se l'utente è autenticato come bibliotecario
-if (!isset($_SESSION['bibliotecario'])) {
+if (!isset($_SESSION['logged_in']) || $_SESSION['user_type'] !== 'bibliotecario') {
     header("Location: login_bibliotecario.php");
     exit();
 }
 
-$conn = connectToDatabase();
+$db = open_pg_connection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Aggiungi un nuovo libro
@@ -19,32 +18,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $trama = $_POST['trama'] ?? '';
         $casa_editrice = $_POST['casa_editrice'] ?? '';
 
-        $stmt = $conn->prepare("INSERT INTO biblioteca.libro (isbn, titolo, trama, casa_editrice) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $isbn, $titolo, $trama, $casa_editrice);
+        $query = "INSERT INTO biblioteca.libro (isbn, titolo, trama, casa_editrice) VALUES ($1, $2, $3, $4)";
+        $params = array($isbn, $titolo, $trama, $casa_editrice);
 
-        if ($stmt->execute()) {
+        $result = pg_query_params($db, $query, $params);
+
+        if ($result) {
             $_SESSION['success'] = "Libro aggiunto con successo!";
         } else {
-            $_SESSION['error'] = "Errore nell'aggiunta del libro: " . $stmt->error;
+            $_SESSION['error'] = "Errore nell'aggiunta del libro: " . pg_last_error($db);
         }
-
-        $stmt->close();
     }
 
     // Elimina un libro
     if (isset($_POST['elimina'])) {
         $isbn = $_POST['isbn'] ?? '';
 
-        $stmt = $conn->prepare("DELETE FROM biblioteca.libro WHERE isbn = ?");
-        $stmt->bind_param("s", $isbn);
+        $query = "DELETE FROM biblioteca.libro WHERE isbn = $1";
+        $params = array($isbn);
 
-        if ($stmt->execute()) {
+        $result = pg_query_params($db, $query, $params);
+
+        if ($result) {
             $_SESSION['success'] = "Libro eliminato con successo!";
         } else {
-            $_SESSION['error'] = "Errore nell'eliminazione del libro: " . $stmt->error;
+            $_SESSION['error'] = "Errore nell'eliminazione del libro: " . pg_last_error($db);
         }
-
-        $stmt->close();
     }
 
     header("Location: gestione_libri.php");
@@ -53,11 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Recupera l'elenco dei libri
 $query = "SELECT * FROM biblioteca.libro";
-$result = $conn->query($query);
-$libri = $result->fetch_all(MYSQLI_ASSOC);
-$result->free();
+$result = pg_query($db, $query);
+$libri = pg_fetch_all($result);
 
-$conn->close();
+pg_free_result($result);
+close_pg_connection($db);
 ?>
 
 <!DOCTYPE html>
@@ -119,20 +118,26 @@ $conn->close();
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($libri as $libro): ?>
+                <?php if ($libri): ?>
+                    <?php foreach ($libri as $libro): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($libro['isbn']) ?></td>
+                            <td><?= htmlspecialchars($libro['titolo']) ?></td>
+                            <td><?= htmlspecialchars($libro['trama']) ?></td>
+                            <td><?= htmlspecialchars($libro['casa_editrice']) ?></td>
+                            <td>
+                                <form action="gestione_libri.php" method="post" style="display:inline;">
+                                    <input type="hidden" name="isbn" value="<?= htmlspecialchars($libro['isbn']) ?>">
+                                    <button type="submit" name="elimina">Elimina</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <tr>
-                        <td><?= htmlspecialchars($libro['isbn']) ?></td>
-                        <td><?= htmlspecialchars($libro['titolo']) ?></td>
-                        <td><?= htmlspecialchars($libro['trama']) ?></td>
-                        <td><?= htmlspecialchars($libro['casa_editrice']) ?></td>
-                        <td>
-                            <form action="gestione_libri.php" method="post" style="display:inline;">
-                                <input type="hidden" name="isbn" value="<?= htmlspecialchars($libro['isbn']) ?>">
-                                <button type="submit" name="elimina">Elimina</button>
-                            </form>
-                        </td>
+                        <td colspan="5">Nessun libro trovato.</td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
