@@ -1,5 +1,4 @@
 <?php
-
 include_once 'functions.php';
 session_start();
 
@@ -8,7 +7,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['user_type'] !== 'bibliotecario'
     exit();
 }
 
-$conn = connectDB();
+$db = open_pg_connection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['azione'], $_POST['id_sede'])) {
@@ -17,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($azione === 'elimina') {
             $query = "DELETE FROM biblioteca.sede WHERE id = $1";
-            $stmt = pg_prepare($conn, "elimina_sede", $query);
+            $stmt = pg_prepare($db, "elimina_sede", $query);
             if ($stmt) {
-                $result = pg_execute($stmt, array($id_sede));
+                $result = pg_execute($db, "elimina_sede", array($id_sede));
 
                 if ($result) {
                     $_SESSION['message'] = "Sede eliminata con successo.";
@@ -34,11 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $query = "SELECT id, \"città\", indirizzo FROM biblioteca.sede ORDER BY id";
-$result = pg_query($conn, $query);
+$result = pg_query($db, $query);
 $sedi = $result ? pg_fetch_all($result) : [];
 
-disconnectDB($conn);
-
+pg_free_result($result);
+close_pg_connection($db);
 ?>
 
 <!DOCTYPE html>
@@ -97,4 +96,4 @@ disconnectDB($conn);
         </table>
     </div>
 </body>
-</html>
+</html
