@@ -11,6 +11,19 @@ function open_pg_connection() {
     return pg_connect($connection);
 }
 
+/* Funzione per chiudere la connessione con il database */
+function close_pg_connection($db) {
+    return pg_close($db);
+}
+
+/* Funzione di autenticazione utente */
+function authenticateUser($requiredUserType) {
+    if (!isset($_SESSION['logged_in']) || $_SESSION['user_type'] !== $requiredUserType) {
+        header("Location: login_bibliotecario.php");
+        exit();
+    }
+}
+
 /* Funzione di Login per il lettore */
 function login_lettore($email, $password) {
     if (empty($email) || empty($password)) {
@@ -87,10 +100,5 @@ function cambia_password($email, $new_password) {
         close_pg_connection($db);
     }
     return false;
-}
-
-/* Funzione per chiudere la connessione con il database */
-function close_pg_connection($db) {
-    return pg_close($db);
 }
 ?>
