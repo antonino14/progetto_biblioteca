@@ -1,99 +1,119 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
     display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    position: fixed;
     height: 100%;
+    padding-top: 20px;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    margin: 20px;
-    background-color: #ffffff;
+.sidebar a {
+    display: block;
+    color: #ecf0f1;
+    padding: 15px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background-color: #34495e;
+}
+
+/* Contenuto principale */
+.main-content {
+    margin-left: 250px;
     padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f4f4f4;
+    min-height: 100vh;
 }
 
-.nuovo-bottone-container {
-    text-align: center;
-}
-
-.nuovo-bottone-container .button {
-    background-color: rgb(109, 5, 109);
-    font-size: 1.35em;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-header h1 {
-    color: #2e4057;
-    font-size: 2em;
-}
-
-main {
-    flex: 1;
-}
-
+/* Tabelle */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 10px;
-}
-
-thead {
-    background-color: #2e4057;
-    color: #ffffff;
+    margin-bottom: 20px;
 }
 
 th, td {
-    padding: 10px;
-    text-align: center;
+    padding: 12px;
+    text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
 th {
-    font-size: 1.1em;
+    background-color: #27ae60;
+    color: white;
 }
 
 tr:nth-child(even) {
-    background-color: #f4f4f9;
+    background-color: #f2f2f2;
 }
 
-button {
-    background-color: #2e4057;
-    color: #ffffff;
+/* Bottoni */
+button, .button {
+    background-color: #27ae60;
+    color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #576574;
-}
-
-input[type="number"] {
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 60px;
-}
-
-.torna_indietro {
-    margin-top: 10px;
+    padding: 10px 20px;
     text-align: center;
-    color: #007bff;
     text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-.torna_indietro :hover {
-    text-decoration: underline;
+button:hover, .button:hover {
+    background-color: #1e8449;
+}
+
+/* Form */
+input[type="text"], input[type="email"], input[type="password"], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background-color: #27ae60;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #1e8449;
+}
+
+/* Messaggi */
+.success-message {
+    background-color: #2ecc71;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.error-message {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
 }
