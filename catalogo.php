@@ -2,10 +2,17 @@
 session_start();
 require_once 'functions.php'; // Inclusione del file functions.php
 
-authenticateUser(); // Verifica dell'autenticazione (lettore o bibliotecario)
+// Verifica dell'autenticazione
+if (!isset($_SESSION['logged_in']) || ($_SESSION['user_type'] !== 'lettore' && $_SESSION['user_type'] !== 'bibliotecario')) {
+    header("Location: login_lettore.php");
+    exit();
+}
 
 // Connessione al database
 $conn = open_pg_connection();
+if (!$conn) {
+    die("Errore nella connessione al database: " . pg_last_error());
+}
 
 // Recupero dei dati del catalogo
 $sql = "SELECT l.isbn, l.titolo, l.trama, l.casa_editrice, 
@@ -62,5 +69,5 @@ if (!$result) {
 
 <?php
 pg_free_result($result);
-pg_close($conn);
+close_pg_connection($conn);
 ?>
