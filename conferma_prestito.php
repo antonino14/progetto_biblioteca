@@ -6,14 +6,16 @@ require_once 'functions.php'; // Inclusione del file functions.php
 authenticateUser('lettore');
 
 // Connessione al database
-$conn = connectDatabase();
+$conn = open_pg_connection();
 
 // Controllo e sanitizzazione dei parametri inviati tramite POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $isbn = $_POST['isbn'] ?? '';
     $sede = $_POST['sede'] ?? '';
+    $sede_preferita = $_POST['sede_preferita'] ?? '';
     $isbn = htmlspecialchars(trim($isbn));
     $sede = htmlspecialchars(trim($sede));
+    $sede_preferita = htmlspecialchars(trim($sede_preferita));
 
     // Inserimento del prestito
     $cf_lettore = $_SESSION['cf_lettore'];
@@ -33,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($result_prestito) {
                 echo "<p>Prestito confermato con successo!</p>";
             } else {
-                echo "<p>Errore durante la conferma del prestito.</p>";
+                echo "<p>Errore durante la conferma del prestito: " . pg_last_error($conn) . "</p>";
             }
         } else {
             echo "<p>Non ci sono copie disponibili per il libro richiesto.</p>";
@@ -65,4 +67,4 @@ pg_close($conn);
         <a href="area_prestiti.php">Torna all'area prestiti</a>
     </main>
 </body>
-</html>
+</html>>
