@@ -68,24 +68,24 @@ DROP FUNCTION IF EXISTS biblioteca.check_max_prestiti();
 DROP FUNCTION IF EXISTS biblioteca.aggiorna_disponibilita();
 -- *not* dropping schema, since initdb creates it
 DROP SCHEMA IF EXISTS biblioteca;
-DROP SCHEMA IF EXISTS antonio_ottina;
+DROP SCHEMA IF EXISTS antonino_ottina;
 --
--- Name: antonio_ottina; Type: SCHEMA; Schema: -; Owner: antonio_ottina
+-- Name: antonino_ottina; Type: SCHEMA; Schema: -; Owner: antonino_ottina
 --
 
-CREATE SCHEMA antonio_ottina;
+CREATE SCHEMA antonino_ottina;
 
 
-ALTER SCHEMA antonio_ottina OWNER TO antonio_ottina;
+ALTER SCHEMA antonino_ottina OWNER TO antonino_ottina;
 
 --
--- Name: biblioteca; Type: SCHEMA; Schema: -; Owner: antonio_ottina
+-- Name: biblioteca; Type: SCHEMA; Schema: -; Owner: antonino_ottina
 --
 
 CREATE SCHEMA biblioteca;
 
 
-ALTER SCHEMA biblioteca OWNER TO antonio_ottina;
+ALTER SCHEMA biblioteca OWNER TO antonino_ottina;
 
 --
 -- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
@@ -97,7 +97,7 @@ ALTER SCHEMA biblioteca OWNER TO antonio_ottina;
 ALTER SCHEMA public OWNER TO postgres;
 
 --
--- Name: aggiorna_disponibilita(); Type: FUNCTION; Schema: biblioteca; Owner: antonio_ottina
+-- Name: aggiorna_disponibilita(); Type: FUNCTION; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE FUNCTION biblioteca.aggiorna_disponibilita() RETURNS trigger
@@ -117,10 +117,10 @@ CREATE FUNCTION biblioteca.aggiorna_disponibilita() RETURNS trigger
 END;$$;
 
 
-ALTER FUNCTION biblioteca.aggiorna_disponibilita() OWNER TO antonio_ottina;
+ALTER FUNCTION biblioteca.aggiorna_disponibilita() OWNER TO antonino_ottina;
 
 --
--- Name: check_max_prestiti(); Type: FUNCTION; Schema: biblioteca; Owner: antonio_ottina
+-- Name: check_max_prestiti(); Type: FUNCTION; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE FUNCTION biblioteca.check_max_prestiti() RETURNS trigger
@@ -150,10 +150,10 @@ END;
 $$;
 
 
-ALTER FUNCTION biblioteca.check_max_prestiti() OWNER TO antonio_ottina;
+ALTER FUNCTION biblioteca.check_max_prestiti() OWNER TO antonino_ottina;
 
 --
--- Name: check_ritardi(); Type: FUNCTION; Schema: biblioteca; Owner: antonio_ottina
+-- Name: check_ritardi(); Type: FUNCTION; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE FUNCTION biblioteca.check_ritardi() RETURNS trigger
@@ -169,10 +169,10 @@ END;
 $$;
 
 
-ALTER FUNCTION biblioteca.check_ritardi() OWNER TO antonio_ottina;
+ALTER FUNCTION biblioteca.check_ritardi() OWNER TO antonino_ottina;
 
 --
--- Name: proroga_prestito(character, integer); Type: FUNCTION; Schema: biblioteca; Owner: antonio_ottina
+-- Name: proroga_prestito(character, integer); Type: FUNCTION; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE FUNCTION biblioteca.proroga_prestito(p_cod_prestito character, p_giorni integer) RETURNS boolean
@@ -204,10 +204,10 @@ END;
 $$;
 
 
-ALTER FUNCTION biblioteca.proroga_prestito(p_cod_prestito character, p_giorni integer) OWNER TO antonio_ottina;
+ALTER FUNCTION biblioteca.proroga_prestito(p_cod_prestito character, p_giorni integer) OWNER TO antonino_ottina;
 
 --
--- Name: seleziona_copia(character, character); Type: FUNCTION; Schema: biblioteca; Owner: antonio_ottina
+-- Name: seleziona_copia(character, character); Type: FUNCTION; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE FUNCTION biblioteca.seleziona_copia(isbn character, sede_preferita character) RETURNS character
@@ -237,10 +237,10 @@ END;
 $$;
 
 
-ALTER FUNCTION biblioteca.seleziona_copia(isbn character, sede_preferita character) OWNER TO antonio_ottina;
+ALTER FUNCTION biblioteca.seleziona_copia(isbn character, sede_preferita character) OWNER TO antonino_ottina;
 
 --
--- Name: update_ritardi(); Type: FUNCTION; Schema: biblioteca; Owner: antonio_ottina
+-- Name: update_ritardi(); Type: FUNCTION; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE FUNCTION biblioteca.update_ritardi() RETURNS trigger
@@ -258,14 +258,14 @@ END;
 $$;
 
 
-ALTER FUNCTION biblioteca.update_ritardi() OWNER TO antonio_ottina;
+ALTER FUNCTION biblioteca.update_ritardi() OWNER TO antonino_ottina;
 
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: autore; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: autore; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.autore (
@@ -278,10 +278,10 @@ CREATE TABLE biblioteca.autore (
 );
 
 
-ALTER TABLE biblioteca.autore OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.autore OWNER TO antonino_ottina;
 
 --
--- Name: catalogo; Type: VIEW; Schema: biblioteca; Owner: antonio_ottina
+-- Name: catalogo; Type: VIEW; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE VIEW biblioteca.catalogo AS
@@ -293,17 +293,17 @@ SELECT
     NULL::text AS autori;
 
 
-ALTER TABLE biblioteca.catalogo OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.catalogo OWNER TO antonino_ottina;
 
 --
--- Name: VIEW catalogo; Type: COMMENT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: VIEW catalogo; Type: COMMENT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 COMMENT ON VIEW biblioteca.catalogo IS 'Vista per la visualizzazione del catalogo';
 
 
 --
--- Name: copia; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: copia; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.copia (
@@ -314,10 +314,10 @@ CREATE TABLE biblioteca.copia (
 );
 
 
-ALTER TABLE biblioteca.copia OWNER TO antonio_ottina
+ALTER TABLE biblioteca.copia OWNER TO antonino_ottina;
 
 --
--- Name: lettore; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: lettore; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.lettore (
@@ -330,10 +330,10 @@ CREATE TABLE biblioteca.lettore (
 );
 
 
-ALTER TABLE biblioteca.lettore OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.lettore OWNER TO antonino_ottina;
 
 --
--- Name: prestito; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: prestito; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.prestito (
@@ -347,10 +347,10 @@ CREATE TABLE biblioteca.prestito (
 );
 
 
-ALTER TABLE biblioteca.prestito OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.prestito OWNER TO antonino_ottina;
 
 --
--- Name: sede; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: sede; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.sede (
@@ -360,10 +360,10 @@ CREATE TABLE biblioteca.sede (
 );
 
 
-ALTER TABLE biblioteca.sede OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.sede OWNER TO antonino_ottina;
 
 --
--- Name: libri_in_ritardo; Type: VIEW; Schema: biblioteca; Owner: antonio_ottina
+-- Name: libri_in_ritardo; Type: VIEW; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE VIEW biblioteca.libri_in_ritardo AS
@@ -383,17 +383,17 @@ CREATE VIEW biblioteca.libri_in_ritardo AS
   ORDER BY s.id;
 
 
-ALTER TABLE biblioteca.libri_in_ritardo OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.libri_in_ritardo OWNER TO antonino_ottina;
 
 --
--- Name: VIEW libri_in_ritardo; Type: COMMENT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: VIEW libri_in_ritardo; Type: COMMENT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 COMMENT ON VIEW biblioteca.libri_in_ritardo IS 'Vista per i libri in prestito in ritardo per ogni sede';
 
 
 --
--- Name: libro; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: libro; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.libro (
@@ -404,10 +404,10 @@ CREATE TABLE biblioteca.libro (
 );
 
 
-ALTER TABLE biblioteca.libro OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.libro OWNER TO antonino_ottina;
 
 --
--- Name: num_prestiti_in_corso; Type: VIEW; Schema: biblioteca; Owner: antonio_ottina
+-- Name: num_prestiti_in_corso; Type: VIEW; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE VIEW biblioteca.num_prestiti_in_corso AS
@@ -420,17 +420,17 @@ CREATE VIEW biblioteca.num_prestiti_in_corso AS
   ORDER BY c.sede;
 
 
-ALTER TABLE biblioteca.num_prestiti_in_corso OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.num_prestiti_in_corso OWNER TO antonino_ottina;
 
 --
--- Name: VIEW num_prestiti_in_corso; Type: COMMENT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: VIEW num_prestiti_in_corso; Type: COMMENT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 COMMENT ON VIEW biblioteca.num_prestiti_in_corso IS 'Vista per il numero totale di prestiti in corso per ogni sede';
 
 
 --
--- Name: num_totale_copie; Type: VIEW; Schema: biblioteca; Owner: antonio_ottina
+-- Name: num_totale_copie; Type: VIEW; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE VIEW biblioteca.num_totale_copie AS
@@ -441,17 +441,17 @@ CREATE VIEW biblioteca.num_totale_copie AS
   ORDER BY copia.sede;
 
 
-ALTER TABLE biblioteca.num_totale_copie OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.num_totale_copie OWNER TO antonino_ottina;
 
 --
--- Name: VIEW num_totale_copie; Type: COMMENT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: VIEW num_totale_copie; Type: COMMENT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 COMMENT ON VIEW biblioteca.num_totale_copie IS 'Vista per il numero totale delle copie per ogni sede';
 
 
 --
--- Name: num_totale_isbn; Type: VIEW; Schema: biblioteca; Owner: antonio_ottina
+-- Name: num_totale_isbn; Type: VIEW; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE VIEW biblioteca.num_totale_isbn AS
@@ -462,17 +462,17 @@ CREATE VIEW biblioteca.num_totale_isbn AS
   ORDER BY copia.sede;
 
 
-ALTER TABLE biblioteca.num_totale_isbn OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.num_totale_isbn OWNER TO antonino_ottina;
 
 --
--- Name: VIEW num_totale_isbn; Type: COMMENT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: VIEW num_totale_isbn; Type: COMMENT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 COMMENT ON VIEW biblioteca.num_totale_isbn IS 'Vista per il numero totale dei codici ISBN per ogni sede';
 
 
 --
--- Name: prestiti_aperti; Type: VIEW; Schema: biblioteca; Owner: antonio_ottina
+-- Name: prestiti_aperti; Type: VIEW; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE VIEW biblioteca.prestiti_aperti AS
@@ -489,17 +489,17 @@ CREATE VIEW biblioteca.prestiti_aperti AS
   ORDER BY p.cod_prestito;
 
 
-ALTER TABLE biblioteca.prestiti_aperti OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.prestiti_aperti OWNER TO antonino_ottina;
 
 --
--- Name: VIEW prestiti_aperti; Type: COMMENT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: VIEW prestiti_aperti; Type: COMMENT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 COMMENT ON VIEW biblioteca.prestiti_aperti IS 'Vista per tutti i prestiti aperti';
 
 
 --
--- Name: scritto; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: scritto; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.scritto (
@@ -508,10 +508,10 @@ CREATE TABLE biblioteca.scritto (
 );
 
 
-ALTER TABLE biblioteca.scritto OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.scritto OWNER TO antonino_ottina;
 
 --
--- Name: statistiche_sede; Type: VIEW; Schema: biblioteca; Owner: antonio_ottina
+-- Name: statistiche_sede; Type: VIEW; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE VIEW biblioteca.statistiche_sede AS
@@ -528,17 +528,17 @@ CREATE VIEW biblioteca.statistiche_sede AS
   ORDER BY s.id;
 
 
-ALTER TABLE biblioteca.statistiche_sede OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.statistiche_sede OWNER TO antonino_ottina;
 
 --
--- Name: VIEW statistiche_sede; Type: COMMENT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: VIEW statistiche_sede; Type: COMMENT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 COMMENT ON VIEW biblioteca.statistiche_sede IS 'Vista complessiva per le statistiche per ogni sede con città e indirizzo';
 
 
 --
--- Name: utente_bibliotecario; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: utente_bibliotecario; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.utente_bibliotecario (
@@ -547,10 +547,10 @@ CREATE TABLE biblioteca.utente_bibliotecario (
 );
 
 
-ALTER TABLE biblioteca.utente_bibliotecario OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.utente_bibliotecario OWNER TO antonino_ottina;
 
 --
--- Name: utente_lettore; Type: TABLE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: utente_lettore; Type: TABLE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TABLE biblioteca.utente_lettore (
@@ -560,10 +560,10 @@ CREATE TABLE biblioteca.utente_lettore (
 );
 
 
-ALTER TABLE biblioteca.utente_lettore OWNER TO antonio_ottina;
+ALTER TABLE biblioteca.utente_lettore OWNER TO antonino_ottina;
 
 --
--- Data for Name: autore; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: autore; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
 
 INSERT INTO biblioteca.autore VALUES ('A00001', 'Gabriel', 'Garcia Marquez', '1927-03-06', '2014-04-17', 'Autore colombiano, premio Nobel.');
@@ -591,7 +591,7 @@ INSERT INTO biblioteca.autore VALUES ('A00022', 'Giovannino', 'Guareschi', '1908
 
 
 --
--- Data for Name: copia; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: copia; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
 
 INSERT INTO biblioteca.copia VALUES ('C00008', '9780199536894', 'S00008', 'P00022');
@@ -629,7 +629,7 @@ INSERT INTO biblioteca.copia VALUES ('C00027', '9780486280615', 'S00007', NULL);
 
 
 --
--- Data for Name: lettore; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: lettore; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
 
 INSERT INTO biblioteca.lettore VALUES ('CF00000000000004', 'Pietro', 'Strambini', 'premium', 0);
@@ -651,7 +651,7 @@ INSERT INTO biblioteca.lettore VALUES ('CF00000000000016', 'Francesco', 'Ottina'
 
 
 --
--- Data for Name: libro; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: libro; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
 
 INSERT INTO biblioteca.libro VALUES ('9780141185064', 'Cent''anni di solitudine', 'Trama del libro Cent''anni di solitudine.', 'Penguin Classics');
@@ -678,8 +678,9 @@ INSERT INTO biblioteca.libro VALUES ('9780062872335', 'Springfield Confidential'
 
 
 --
--- Data for Name: prestito; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: prestito; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
+
 
 INSERT INTO biblioteca.prestito VALUES ('P00004', '2024-01-04', '2024-01-18', NULL, true, 'CF00000000000004');
 INSERT INTO biblioteca.prestito VALUES ('P00006', '2024-01-06', '2024-01-20', NULL, true, 'CF00000000000006');
@@ -709,7 +710,7 @@ INSERT INTO biblioteca.prestito VALUES ('P00023', '2024-07-07', '2024-08-14', '2
 
 
 --
--- Data for Name: scritto; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: scritto; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
 
 INSERT INTO biblioteca.scritto VALUES ('A00001', '9780141185064');
@@ -737,7 +738,7 @@ INSERT INTO biblioteca.scritto VALUES ('A00021', '9780062872335');
 
 
 --
--- Data for Name: sede; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: sede; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
 
 INSERT INTO biblioteca.sede VALUES ('S00001', 'Milano', 'Via Roma 1');
@@ -763,17 +764,15 @@ INSERT INTO biblioteca.sede VALUES ('S00014', 'Milano', 'Via S. Domenico Savio 3
 
 
 --
--- Data for Name: utente_bibliotecario; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: utente_bibliotecario; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
 
-INSERT INTO biblioteca.utente_bibliotecario VALUES ('admin.biblio1@example.com', 'hashpassword1');
-INSERT INTO biblioteca.utente_bibliotecario VALUES ('admin.biblio2@example.com', 'hashpassword2');
-INSERT INTO biblioteca.utente_bibliotecario VALUES ('admin.biblio1@example.com', 'hashpassword1');
-INSERT INTO biblioteca.utente_bibliotecario VALUES ('admin.biblio2@example.com', 'hashpassword2');
+INSERT INTO biblioteca.utente_bibliotecario VALUES ('antonino.ottina@studenti.unimi.it', '81ebe228e8a2c54bb5f1b97c34b7f321');
+INSERT INTO biblioteca.utente_bibliotecario VALUES ('giovanni.livraga@gmail.com', '46f2026157e5cf498ec1fd7f7be8ca6c');
 
 
 --
--- Data for Name: utente_lettore; Type: TABLE DATA; Schema: biblioteca; Owner: antonio_ottina
+-- Data for Name: utente_lettore; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
 --
 
 INSERT INTO biblioteca.utente_lettore VALUES ('francesco.ottina@example.com', '7b7c3421ba78a7b89afa4ea5e57531ce', 'CF00000000000016');
@@ -791,11 +790,11 @@ INSERT INTO biblioteca.utente_lettore VALUES ('dotty.borgese@example.it', 'b9bc3
 INSERT INTO biblioteca.utente_lettore VALUES ('rocco.costantino@example.it', 'c1cbb21ce9a585dbef53f4182cfe6eec', 'CF00000000000012');
 INSERT INTO biblioteca.utente_lettore VALUES ('carlo.iannello@example.it', 'eb84ed65827600ba61c3aa6e63188c19', 'CF00000000000013');
 INSERT INTO biblioteca.utente_lettore VALUES ('luca.todaro@example.it', '795d9e6925209f61c261a77492822c21', 'CF00000000000014');
-INSERT INTO biblioteca.utente_lettore VALUES ('gsbriel.naso@example.it', '7b027223caaa40ba5360b9cf2a9805a1', 'CF00000000000015');
+INSERT INTO biblioteca.utente_lettore VALUES ('gabriel.naso@example.it', '7b027223caaa40ba5360b9cf2a9805a1', 'CF00000000000015');
 
 
 --
--- Name: autore autore_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: autore autore_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.autore
@@ -803,7 +802,7 @@ ALTER TABLE ONLY biblioteca.autore
 
 
 --
--- Name: copia copia_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: copia copia_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.copia
@@ -811,7 +810,7 @@ ALTER TABLE ONLY biblioteca.copia
 
 
 --
--- Name: lettore lettore_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: lettore lettore_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.lettore
@@ -819,7 +818,7 @@ ALTER TABLE ONLY biblioteca.lettore
 
 
 --
--- Name: libro libro_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: libro libro_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.libro
@@ -827,7 +826,7 @@ ALTER TABLE ONLY biblioteca.libro
 
 
 --
--- Name: prestito prestito_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: prestito prestito_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.prestito
@@ -835,7 +834,7 @@ ALTER TABLE ONLY biblioteca.prestito
 
 
 --
--- Name: scritto scritto_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: scritto scritto_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.scritto
@@ -843,7 +842,7 @@ ALTER TABLE ONLY biblioteca.scritto
 
 
 --
--- Name: sede sede_città_indirizzo_key; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: sede sede_città_indirizzo_key; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.sede
@@ -851,7 +850,7 @@ ALTER TABLE ONLY biblioteca.sede
 
 
 --
--- Name: sede sede_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: sede sede_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.sede
@@ -859,7 +858,7 @@ ALTER TABLE ONLY biblioteca.sede
 
 
 --
--- Name: utente_bibliotecario utente_bibliotecario_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: utente_bibliotecario utente_bibliotecario_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.utente_bibliotecario
@@ -867,7 +866,7 @@ ALTER TABLE ONLY biblioteca.utente_bibliotecario
 
 
 --
--- Name: utente_lettore utente_lettore_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: utente_lettore utente_lettore_pkey; Type: CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.utente_lettore
@@ -875,7 +874,7 @@ ALTER TABLE ONLY biblioteca.utente_lettore
 
 
 --
--- Name: catalogo _RETURN; Type: RULE; Schema: biblioteca; Owner: antonio_ottina
+-- Name: catalogo _RETURN; Type: RULE; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE OR REPLACE VIEW biblioteca.catalogo AS
@@ -892,35 +891,35 @@ CREATE OR REPLACE VIEW biblioteca.catalogo AS
 
 
 --
--- Name: prestito aggiorna_disponibilita_prestito; Type: TRIGGER; Schema: biblioteca; Owner: antonio_ottina
+-- Name: prestito aggiorna_disponibilita_prestito; Type: TRIGGER; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TRIGGER aggiorna_disponibilita_prestito AFTER UPDATE OF data_restituzione ON biblioteca.prestito FOR EACH ROW WHEN (((new.data_restituzione IS NOT NULL) AND (old.prestito_aperto IS TRUE))) EXECUTE FUNCTION biblioteca.aggiorna_disponibilita();
 
 
 --
--- Name: prestito aggiorna_ritardi; Type: TRIGGER; Schema: biblioteca; Owner: antonio_ottina
+-- Name: prestito aggiorna_ritardi; Type: TRIGGER; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TRIGGER aggiorna_ritardi AFTER UPDATE OF data_restituzione ON biblioteca.prestito FOR EACH ROW WHEN ((new.data_restituzione IS NOT NULL)) EXECUTE FUNCTION biblioteca.update_ritardi();
 
 
 --
--- Name: prestito blocco_max_prestiti; Type: TRIGGER; Schema: biblioteca; Owner: antonio_ottina
+-- Name: prestito blocco_max_prestiti; Type: TRIGGER; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TRIGGER blocco_max_prestiti BEFORE INSERT ON biblioteca.prestito FOR EACH ROW EXECUTE FUNCTION biblioteca.check_max_prestiti();
 
 
 --
--- Name: prestito blocco_prestito_ritardatari; Type: TRIGGER; Schema: biblioteca; Owner: antonio_ottina
+-- Name: prestito blocco_prestito_ritardatari; Type: TRIGGER; Schema: biblioteca; Owner: antonino_ottina
 --
 
 CREATE TRIGGER blocco_prestito_ritardatari BEFORE INSERT ON biblioteca.prestito FOR EACH ROW EXECUTE FUNCTION biblioteca.check_ritardi();
 
 
 --
--- Name: copia copia_cod_prestito_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: copia copia_cod_prestito_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.copia
@@ -928,7 +927,7 @@ ALTER TABLE ONLY biblioteca.copia
 
 
 --
--- Name: copia copia_libro_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: copia copia_libro_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.copia
@@ -936,7 +935,7 @@ ALTER TABLE ONLY biblioteca.copia
 
 
 --
--- Name: copia copia_sede_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: copia copia_sede_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.copia
@@ -944,7 +943,7 @@ ALTER TABLE ONLY biblioteca.copia
 
 
 --
--- Name: prestito prestito_lettore_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: prestito prestito_lettore_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.prestito
@@ -952,7 +951,7 @@ ALTER TABLE ONLY biblioteca.prestito
 
 
 --
--- Name: scritto scritto_autore_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: scritto scritto_autore_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.scritto
@@ -960,7 +959,7 @@ ALTER TABLE ONLY biblioteca.scritto
 
 
 --
--- Name: scritto scritto_libro_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina
+-- Name: scritto scritto_libro_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.scritto
@@ -968,7 +967,7 @@ ALTER TABLE ONLY biblioteca.scritto
 
 
 --
--- Name: utente_lettore utente_lettore_cf_lettore_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonio_ottina\
+-- Name: utente_lettore utente_lettore_cf_lettore_fkey; Type: FK CONSTRAINT; Schema: biblioteca; Owner: antonino_ottina
 --
 
 ALTER TABLE ONLY biblioteca.utente_lettore
@@ -988,72 +987,3 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 
 
-
-
--- Creazione della tabella biblioteca.statistiche_sede
-CREATE TABLE biblioteca.statistiche_sede (
-    id_sede CHARACTER(6) PRIMARY KEY,
-    totale_copie INTEGER NOT NULL DEFAULT 0,
-    totale_isbn INTEGER NOT NULL DEFAULT 0,
-    totale_prestiti_in_corso INTEGER NOT NULL DEFAULT 0
-);
-
--- Creazione della vista biblioteca.prestiti_aperti
-CREATE VIEW biblioteca.prestiti_aperti AS
-SELECT
-    p.cod_prestito,
-    p.data_inizio,
-    p.data_fine,
-    l.nome AS lettore_nome,
-    l.cognome AS lettore_cognome,
-    c.id AS copia_id,
-    c.libro AS isbn,
-    s.id AS sede_id
-FROM biblioteca.prestito p
-JOIN biblioteca.lettore l ON p.lettore = l.cf
-JOIN biblioteca.copia c ON p.copia = c.id
-JOIN biblioteca.sede s ON c.sede = s.id
-WHERE p.data_restituzione IS NULL;
-
--- Aggiungere colonne mancanti
-ALTER TABLE biblioteca.autore
-ADD COLUMN biografia CHARACTER VARYING(255);
-
-ALTER TABLE biblioteca.copia
-ADD COLUMN disponibile BOOLEAN DEFAULT TRUE;
-
-ALTER TABLE biblioteca.lettore
-ADD COLUMN categoria CHARACTER(7) NOT NULL DEFAULT 'base';
-
--- Trigger per aggiornare biblioteca.statistiche_sede
-CREATE OR REPLACE FUNCTION aggiorna_statistiche_sede()
-RETURNS TRIGGER AS $$
-BEGIN
-    UPDATE biblioteca.statistiche_sede
-    SET totale_copie = (SELECT COUNT(*) FROM biblioteca.copia WHERE sede = NEW.sede),
-        totale_isbn = (SELECT COUNT(DISTINCT libro) FROM biblioteca.copia WHERE sede = NEW.sede),
-        totale_prestiti_in_corso = (SELECT COUNT(*) FROM biblioteca.prestito WHERE copia IN (
-            SELECT id FROM biblioteca.copia WHERE sede = NEW.sede) AND data_restituzione IS NULL)
-    WHERE id_sede = NEW.sede;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trigger_aggiorna_statistiche
-AFTER INSERT OR UPDATE OR DELETE ON biblioteca.copia
-FOR EACH ROW EXECUTE FUNCTION aggiorna_statistiche_sede();
-
--- Trigger per blocco prestiti a lettori ritardatari
-CREATE OR REPLACE FUNCTION blocco_lettori_ritardatari()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF (SELECT num_ritardi FROM biblioteca.lettore WHERE cf = NEW.lettore) >= 5 THEN
-        RAISE EXCEPTION 'Prestito non concesso: troppi ritardi per il lettore %', NEW.lettore;
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trigger_blocco_lettori
-BEFORE INSERT ON biblioteca.prestito
-FOR EACH ROW EXECUTE FUNCTION blocco_lettori_ritardatari();
