@@ -25,22 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Bibliotecario</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login_styles.css">
 </head>
 <body>
-    <h1>Accesso Bibliotecario</h1>
-    <?php if (isset($error_message)): ?>
-        <p class="error"> <?= htmlspecialchars($error_message) ?> </p>
-    <?php endif; ?>
-    <form method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <div class="login-container">
+        <h2>Accesso Bibliotecario</h2>
+        <?php if (isset($error_message)): ?>
+            <div class="error-message"><?= htmlspecialchars($error_message) ?></div>
+        <?php endif; ?>
+        <form method="POST">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Inserisci la tua email" required>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Inserisci la tua password" required>
 
-        <button type="submit">Accedi</button>
-    </form>
+            <button type="submit">Accedi</button>
+        </form>
+    </div>
 </body>
 </html>
