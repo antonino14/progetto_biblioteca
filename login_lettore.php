@@ -3,20 +3,20 @@ session_start();
 require_once 'functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-    // Verifica credenziali
     $cf_lettore = login_lettore($email, $password);
 
     if ($cf_lettore) {
         $_SESSION['logged_in'] = true;
         $_SESSION['user_type'] = 'lettore';
         $_SESSION['cf_lettore'] = $cf_lettore;
-        header('Location: area_prestiti.php');
+
+        header("Location: area_prestiti.php");
         exit();
     } else {
-        $error_message = "Credenziali non valide. Riprova.";
+        $error = "Email o password errati.";
     }
 }
 ?>
@@ -26,21 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login Lettore</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login_styles.css">
 </head>
 <body>
-    <h1>Accesso Lettore</h1>
-    <?php if (isset($error_message)): ?>
-        <p class="error"> <?= htmlspecialchars($error_message) ?> </p>
-    <?php endif; ?>
-    <form method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <button type="submit">Accedi</button>
-    </form>
+    <div class="login-container">
+        <h2>Login Lettore</h2>
+        <?php if (isset($error)): ?>
+            <div class="error-message"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
+        <form action="login_lettore.php" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
 </body>
 </html>
