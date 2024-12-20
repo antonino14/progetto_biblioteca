@@ -1,4 +1,4 @@
-<?php
+<?php 
 require_once 'functions.php';
 session_start();
 
@@ -141,6 +141,7 @@ close_pg_connection($db);
             </tbody>
         </table>
     </div>
+    <link rel="stylesheet" href="gestione_styles.css">
 </body>
 
 </html>
