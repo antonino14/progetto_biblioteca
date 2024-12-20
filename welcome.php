@@ -20,8 +20,5 @@
         </div>
     </div>
 </div>
-<footer>
-    &copy; 2024 Biblioteca Comunale. Tutti i diritti riservati.
-</footer>
 </body>
 </html>
