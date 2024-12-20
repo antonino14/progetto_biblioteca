@@ -6,7 +6,12 @@ require_once 'functions.php'; // Inclusione del file functions.php
 authenticateUser('bibliotecario');
 
 // Connessione al database
-$conn = connectDatabase();
+$conn = open_pg_connection();
+if (!$conn) {
+    die("Errore nella connessione al database: " . pg_last_error());
+}
+
+echo "Connessione al database riuscita.<br>";
 
 // Recupero della lista dei lettori
 $sql = "SELECT cf, nome, cognome, categoria, num_ritardi FROM biblioteca.lettore ORDER BY cognome, nome";
@@ -15,6 +20,8 @@ $result = pg_query($conn, $sql);
 if (!$result) {
     die("Errore nella query: " . pg_last_error($conn));
 }
+
+echo "Query eseguita con successo.<br>";
 ?>
 
 <!DOCTYPE html>
@@ -57,5 +64,5 @@ if (!$result) {
 
 <?php
 pg_free_result($result);
-pg_close($conn);
+close_pg_connection($conn);
 ?>
