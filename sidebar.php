@@ -4,7 +4,6 @@ session_start();
 $user_type = $_SESSION['user_type'] ?? null;
 ?>
 <div class="sidebar">
-    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
     <ul>
         <li><a href="welcome.php">Home</a></li>
         <?php if ($user_type === 'bibliotecario'): ?>
@@ -19,9 +18,5 @@ $user_type = $_SESSION['user_type'] ?? null;
         <li><a href="logout.php">Logout</a></li>
     </ul>
 </div>
-<script>
-function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    sidebar.classList.toggle('open');
-}
-</script>
+<div class="main-content">
+</div>
