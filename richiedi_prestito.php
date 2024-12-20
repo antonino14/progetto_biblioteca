@@ -1,11 +1,11 @@
 <?php
 ini_set("display_errors", "On");
 ini_set("error_reporting", E_ALL);
-include_once('library/functions.php');
+require_once 'functions.php'; // Inclusione del file functions.php
 
 // Controllo se il lettore è loggato
 session_start();
-if (!isset($_SESSION['lettore'])) {
+if (!isset($_SESSION['logged_in']) || $_SESSION['user_type'] !== 'lettore') {
     header("Location: login_lettore.php");
     exit();
 }
@@ -13,8 +13,9 @@ if (!isset($_SESSION['lettore'])) {
 // Connessione al database
 $db = open_pg_connection();
 
-// Recupera l'ISBN dal parametro della query string
+// Recupera l'ISBN e la sede preferita dai parametri della query string
 $isbn = $_GET['isbn'];
+$sede_preferita = $_GET['sede_preferita'] ?? '';
 
 // Query per ottenere le sedi con copie disponibili del libro
 $query = "SELECT DISTINCT s.id as id_sede, s.città, s.indirizzo
@@ -42,6 +43,7 @@ close_pg_connection($db);
         <main>
             <form action="conferma_prestito.php" method="post">
                 <input type="hidden" name="isbn" value="<?php echo htmlspecialchars($isbn); ?>">
+                <input type="hidden" name="sede_preferita" value="<?php echo htmlspecialchars($sede_preferita); ?>">
                 <label for="sede">Seleziona una sede:</label>
                 <select id="sede" name="sede" required>
                     <?php
@@ -51,7 +53,7 @@ close_pg_connection($db);
                     ?>
                 </select>
                 <button type="submit">Conferma Prestito</button>
-                <p><a href="catalogo.php">Torna al catalogo</a></p>
+                <p><a href="area_prestiti.php">Torna all'area prestiti</a></p>
             </form>
         </main>
     </div>
