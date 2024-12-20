@@ -10,18 +10,32 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['user_type'] !== 'bibliotecario'
     exit();
 }
 
-$bibliotecario = $_SESSION['user_type'];
-
 // Connessione al database
 $db = open_pg_connection();
+if (!$db) {
+    die("Errore nella connessione al database: " . pg_last_error());
+}
+
+// Verifica l'esistenza della vista 'prestiti_aperti'
+$check_query = "SELECT EXISTS (SELECT 1 FROM pg_views WHERE viewname = 'prestiti_aperti')";
+$check_result = pg_query($db, $check_query);
+if (!$check_result) {
+    die("Errore nel controllo dell'esistenza della vista: " . pg_last_error($db));
+}
+$check_row = pg_fetch_assoc($check_result);
+if (!$check_row['exists']) {
+    die("La vista 'prestiti_aperti' non esiste nel database.");
+}
 
 try {
     // Gestione restituzione prestito
     if (isset($_POST['restituzione']) && isset($_POST['cod_prestito'])) {
         $query = "UPDATE biblioteca.prestito SET data_restituzione = CURRENT_DATE WHERE cod_prestito = $1;";
         $result = pg_prepare($db, "fine_prestito", $query);
+        if (!$result) {
+            throw new Exception("Errore nella preparazione della query: " . pg_last_error($db));
+        }
         $result = pg_execute($db, "fine_prestito", array($_POST['cod_prestito']));
-
         if (!$result) {
             throw new Exception("Errore durante la chiusura del prestito: " . pg_last_error($db));
         } else {
@@ -31,10 +45,15 @@ try {
     // Gestione proroga prestito
     else if (isset($_POST['proroga']) && isset($_POST['cod_prestito']) && isset($_POST['giorni'])) {
         $giorni = intval($_POST['giorni']);
-        $query = "SELECT * FROM biblioteca.proroga_prestito($1, $2)";
+        $query = "SELECT biblioteca.proroga_prestito($1, $2)";
         $result = pg_prepare($db, "proroga_prestito", $query);
+        if (!$result) {
+            throw new Exception("Errore nella preparazione della query: " . pg_last_error($db));
+        }
         $result = pg_execute($db, "proroga_prestito", array($_POST['cod_prestito'], $giorni));
-
+        if (!$result) {
+            throw new Exception("Errore durante la proroga del prestito: " . pg_last_error($db));
+        }
         if (pg_fetch_row($result)[0] === 'f') {
             throw new Exception("Il prestito è già in ritardo e non può essere prorogato.");
         } else {
@@ -79,7 +98,6 @@ try {
                     // Query per ottenere i prestiti aperti
                     $query = "SELECT * FROM biblioteca.prestiti_aperti;";
                     $result = pg_query($db, $query);
-
                     if (!$result) {
                         echo "<tr><td colspan='7'>Errore nella query: " . pg_last_error($db) . "</td></tr>";
                     } else {
