@@ -1,15 +1,15 @@
 <?php
 ini_set("display_errors", "On");
 ini_set("error_reporting", E_ALL);
-include_once('library/functions.php');
+include_once('functions.php'); // Assicurati che il percorso del file sia corretto
 
 // Controllo se il lettore è loggato
 session_start();
-if (!isset($_SESSION['lettore'])) {
+if (!isset($_SESSION['logged_in']) || $_SESSION['user_type'] !== 'lettore') {
     header("Location: login_lettore.php");
     exit();
 }
-$cf = $_SESSION['lettore'];
+$cf = $_SESSION['cf_lettore'];
 
 // Connessione al database
 $db = open_pg_connection();
@@ -20,7 +20,7 @@ $result = pg_prepare($db, "query_last_cod_prestito", $query);
 $result = pg_execute($db, "query_last_cod_prestito", array());
 
 if (!$result) {
-    throw new Exception('Errore durante la ricerca dell\'ultimo codice prestito');
+    throw new Exception('Errore durante la ricerca dell\'ultimo codice prestito: ' . pg_last_error($db));
 }
 
 $row = pg_fetch_assoc($result);
@@ -51,18 +51,21 @@ try {
     $result = pg_execute($db, "query_copia", array($isbn, $id_sede));
 
     if (!$result) {
-        throw new Exception("Errore durante la ricerca della copia in sede");
+        throw new Exception("Errore durante la ricerca della copia in sede: " . pg_last_error($db));
     }
     $copia = pg_fetch_assoc($result);
     $cod_copia = $copia['copia_selezionata'];
 
+    if (!$cod_copia) {
+        throw new Exception("Nessuna copia disponibile per il libro selezionato nella sede specificata");
+    }
 
     // Inserisci il nuovo prestito
     $query = "INSERT INTO biblioteca.prestito (cod_prestito, data_inizio, data_fine, prestito_aperto, lettore) VALUES ($1, CURRENT_DATE, (CURRENT_DATE + INTERVAL '30 days'), TRUE, $2)";
     $result = pg_prepare($db, "query_prestito", $query);
     $result = pg_execute($db, "query_prestito", array($new_cod_prestito, $cf));
 
-    if (pg_fetch_row($result) == null) {
+    if (pg_affected_rows($result) == 0) {
         throw new Exception("Errore durante l'inserimento del prestito. Controlla se hai raggiunto il numero massimo di prestiti");
     }
 
@@ -72,7 +75,7 @@ try {
     $result = pg_execute($db, "query_copia_prestito", array($new_cod_prestito, $cod_copia));
 
     if (!$result) {
-        throw new Exception("Errore durante l'aggiornamento della copia");
+        throw new Exception("Errore durante l'aggiornamento della copia: " . pg_last_error($db));
     }
 
     // Commit della transazione
