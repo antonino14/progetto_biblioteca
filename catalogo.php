@@ -35,7 +35,7 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogo</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="catalogo_styles.css"> <!-- Assicuriamoci che il file CSS si chiami 'catalogo_styles.css' -->
 </head>
 <body>
     <?php include 'sidebar.php'; ?>
@@ -66,8 +66,3 @@ if (!$result) {
     </main>
 </body>
 </html>
-
-<?php
-pg_free_result($result);
-close_pg_connection($conn);
-?>
