@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inserisci Libro</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/insert_styles.css">
 </head>
 <body>
 <header>
@@ -80,7 +80,7 @@
 
 </div>
 <footer>
-    &copy; 2024 Biblioteca Comunale. Tutti i diritti riservati.
 </footer>
+<link rel="stylesheet" href="insert_styles.css">
 </body>
 </html>
