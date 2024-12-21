@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 ini_set("display_errors", "On");
 ini_set("error_reporting", E_ALL);
@@ -65,7 +65,7 @@ disconnectDB($conn);
 <html lang="it">
 <head>
     <title>Inserisci Copia</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="css/insert_styles.css">
 </head>
 <body>
     <?php include 'sidebar.php'; ?>
@@ -105,5 +105,6 @@ disconnectDB($conn);
             <a href="gestione_sedi.php" class="torna-indietro">Torna Indietro</a>
         </form>
     </div>
+    <link rel="stylesheet" href="insert_styles.css">
 </body>
 </html>
