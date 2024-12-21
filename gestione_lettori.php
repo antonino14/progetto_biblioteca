@@ -55,6 +55,7 @@ if (!$result) {
             </tbody>
         </table>
     </main>
+    <link rel="stylesheet" href="gestione_styles.css">
 </body>
 </html>
 
