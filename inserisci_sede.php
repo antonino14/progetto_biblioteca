@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 require_once 'functions.php';
 
 // Connessione al database
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <title>Inserisci Sede</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="css/insert_styles.css">
 </head>
 <body>
     <h1>Inserisci Sede</h1>
@@ -63,5 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" id="indirizzo" name="indirizzo" required>
         <button type="submit">Inserisci</button>
     </form>
+    <link rel="stylesheet" href="insert_styles.css">
 </body>
 </html>
