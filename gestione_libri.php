@@ -144,4 +144,4 @@ close_pg_connection($db);
     <link rel="stylesheet" href="gestione_styles.css">
 </body>
 
-</html>
+</html>>
