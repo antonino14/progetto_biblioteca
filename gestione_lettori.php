@@ -11,8 +11,6 @@ if (!$conn) {
     die("Errore nella connessione al database: " . pg_last_error());
 }
 
-echo "Connessione al database riuscita.<br>";
-
 // Recupero della lista dei lettori
 $sql = "SELECT cf, nome, cognome, categoria, num_ritardi FROM biblioteca.lettore ORDER BY cognome, nome";
 $result = pg_query($conn, $sql);
@@ -20,8 +18,6 @@ $result = pg_query($conn, $sql);
 if (!$result) {
     die("Errore nella query: " . pg_last_error($conn));
 }
-
-echo "Query eseguita con successo.<br>";
 ?>
 
 <!DOCTYPE html>
