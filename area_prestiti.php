@@ -72,7 +72,7 @@ close_pg_connection($conn);
 <head>
     <meta charset="UTF-8">
     <title>Area Prestiti</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="prestito_styles.css"> <!-- Assicuriamoci che il file CSS si chiami 'prestito_styles.css' -->
 </head>
 <body>
     <?php include 'sidebar.php'; ?>
@@ -147,4 +147,4 @@ close_pg_connection($conn);
         <button type="submit">Cambia Password</button>
     </form>
 </body>
-</html>>
+</html>
