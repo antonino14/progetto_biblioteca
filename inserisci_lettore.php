@@ -1,4 +1,5 @@
-<?php
+<?php 
+
 require_once 'functions.php';
 
 // Connessione al database
@@ -52,7 +53,7 @@ pg_close($conn);
 <head>
     <meta charset="UTF-8">
     <title>Inserisci Lettore</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="css/insert_styles.css">
 </head>
 <body>
     <h1>Inserisci Lettore</h1>
@@ -79,5 +80,6 @@ pg_close($conn);
         <input type="password" id="password" name="password" required>
         <button type="submit">Inserisci</button>
     </form>
+    <link rel="stylesheet" href="insert_styles.css">
 </body>
 </html>
