@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     } else {
         $error = "Email o password errati.";
+        error_log("Login Lettore fallito per email: $email");
     }
 }
 ?>
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
         </form>
+        <a href="cambia_password.php" class="change-password-button">Cambia Password</a>
     </div>
 </body>
 </html>
