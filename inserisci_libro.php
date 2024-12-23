@@ -1,3 +1,42 @@
+<?php
+require_once 'functions.php';
+session_start();
+$conn = open_pg_connection();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $isbn = trim($_POST['isbn']);
+    $titolo = trim($_POST['titolo']);
+    $trama = trim($_POST['trama']);
+    $casa_editrice = trim($_POST['casa_editrice']);
+    $autori = $_POST['autori'];
+
+    pg_query($conn, 'BEGIN');
+    try {
+        // Inserimento libro
+        $query_libro = "INSERT INTO biblioteca.libro (isbn, titolo, trama, casa_editrice) VALUES ($1, $2, $3, $4)";
+        pg_query_params($conn, $query_libro, array($isbn, $titolo, $trama, $casa_editrice));
+
+        // Relazione libro-autore
+        foreach ($autori as $autore) {
+            $query_scritto = "INSERT INTO biblioteca.scritto (autore, libro) VALUES ($1, $2)";
+            pg_query_params($conn, $query_scritto, array($autore, $isbn));
+        }
+
+        pg_query($conn, 'COMMIT');
+        $_SESSION['success'] = "Libro aggiunto con successo!";
+        header("Location: gestione_libri.php");
+        exit();
+    } catch (Exception $e) {
+        pg_query($conn, 'ROLLBACK');
+        $_SESSION['error'] = "Errore durante l'inserimento del libro: " . htmlspecialchars($e->getMessage());
+        header("Location: gestione_libri.php");
+        exit();
+    } finally {
+        close_pg_connection($conn);
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -10,72 +49,35 @@
 <header>
     <h1>Inserisci Nuovo Libro</h1>
 </header>
-<nav>
-    <a href="welcome.php">Home</a>
-    <a href="catalogo.php">Catalogo</a>
-    <a href="area_prestiti.php">Prestiti</a>
-    <a href="login_bibliotecario.php">Accedi</a>
-</nav>
+
 <div class="container">
 
     <div class="card">
         <h2>Aggiungi un Libro</h2>
         <form method="POST" action="inserisci_libro.php">
-            <label for="titolo">Titolo:</label>
-            <input type="text" id="titolo" name="titolo" placeholder="Inserisci il titolo del libro" required>
-            <label for="autore">Autore:</label>
-            <input type="text" id="autore" name="autore" placeholder="Inserisci l'autore" required>
-            <label for="anno">Anno Pubblicazione:</label>
-            <input type="number" id="anno" name="anno" placeholder="Inserisci l'anno" required>
             <label for="isbn">ISBN:</label>
             <input type="text" id="isbn" name="isbn" placeholder="Inserisci l'ISBN" required>
+            <label for="titolo">Titolo:</label>
+            <input type="text" id="titolo" name="titolo" placeholder="Inserisci il titolo del libro" required>
+            <label for="trama">Trama:</label>
+            <textarea id="trama" name="trama" placeholder="Inserisci la trama del libro" required></textarea>
+            <label for="casa_editrice">Casa Editrice:</label>
+            <input type="text" id="casa_editrice" name="casa_editrice" placeholder="Inserisci la casa editrice" required>
+            <label for="autori">Autori:</label>
+            <select id="autori" name="autori[]" multiple required>
+                <?php
+                $conn = open_pg_connection();
+                $query_autori = "SELECT id, nome || ' ' || cognome AS nome_completo FROM biblioteca.autore ORDER BY nome, cognome";
+                $result_autori = pg_query($conn, $query_autori);
+                while ($row = pg_fetch_assoc($result_autori)) {
+                    echo "<option value=\"" . htmlspecialchars($row['id']) . "\">" . htmlspecialchars($row['nome_completo']) . "</option>";
+                }
+                close_pg_connection($conn);
+                ?>
+            </select>
+            <a href="inserisci_autore.php" class="button">Aggiungi Autore</a>
             <button type="submit" class="button">Inserisci Libro</button>
         </form>
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            require_once 'functions.php';
-            $conn = connectDB();
-
-            $titolo = trim($_POST['titolo']);
-            $autore = trim($_POST['autore']);
-            $anno = (int)$_POST['anno'];
-            $isbn = trim($_POST['isbn']);
-
-            pg_query($conn, 'BEGIN');
-            try {
-                // Inserimento o verifica autore
-                $query_autore = "SELECT id FROM biblioteca.autore WHERE concat(nome, ' ', cognome) = $1 LIMIT 1";
-                $result_autore = pg_query_params($conn, $query_autore, array($autore));
-                if ($row_autore = pg_fetch_assoc($result_autore)) {
-                    $id_autore = $row_autore['id'];
-                } else {
-                    // Suddivisione dell'autore in nome e cognome
-                    $autore_parts = explode(' ', $autore, 2);
-                    $nome_autore = $autore_parts[0];
-                    $cognome_autore = $autore_parts[1] ?? '';
-                    $id_autore = uniqid('A');
-                    $query_insert_autore = "INSERT INTO biblioteca.autore (id, nome, cognome) VALUES ($1, $2, $3)";
-                    pg_query_params($conn, $query_insert_autore, array($id_autore, $nome_autore, $cognome_autore));
-                }
-
-                // Inserimento libro
-                $query_libro = "INSERT INTO biblioteca.libro (isbn, titolo, trama, casa_editrice) VALUES ($1, $2, '', '')";
-                pg_query_params($conn, $query_libro, array($isbn, $titolo));
-
-                // Relazione libro-autore
-                $query_scritto = "INSERT INTO biblioteca.scritto (autore, libro) VALUES ($1, $2)";
-                pg_query_params($conn, $query_scritto, array($id_autore, $isbn));
-
-                pg_query($conn, 'COMMIT');
-                echo "<p class='success'>Libro aggiunto con successo!</p>";
-            } catch (Exception $e) {
-                pg_query($conn, 'ROLLBACK');
-                echo "<p class='error'>Errore durante l'inserimento del libro: " . htmlspecialchars($e->getMessage()) . "</p>";
-            } finally {
-                pg_close($conn);
-            }
-        }
-        ?>
     </div>
 
 </div>
