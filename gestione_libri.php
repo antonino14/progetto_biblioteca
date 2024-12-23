@@ -51,7 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Recupera l'elenco dei libri
-$query = "SELECT * FROM biblioteca.libro";
+$query = "SELECT l.isbn, l.titolo, l.trama, l.casa_editrice, string_agg(a.nome || ' ' || a.cognome, ', ') AS autori 
+          FROM biblioteca.libro l
+          LEFT JOIN biblioteca.scritto s ON l.isbn = s.libro
+          LEFT JOIN biblioteca.autore a ON s.autore = a.id
+          GROUP BY l.isbn, l.titolo, l.trama, l.casa_editrice
+          ORDER BY l.titolo";
 $result = pg_query($db, $query);
 $libri = pg_fetch_all($result);
 
@@ -66,7 +71,6 @@ close_pg_connection($db);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Libri</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -74,6 +78,10 @@ close_pg_connection($db);
 
     <div class="main">
         <h1>Gestione Libri</h1>
+
+        <form method="GET" action="inserisci_libro.php">
+            <button type="submit">Nuovo Libro</button>
+        </form>
 
         <?php if (isset($_SESSION['success'])): ?>
             <div class="success">
@@ -89,23 +97,6 @@ close_pg_connection($db);
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
-        <h2>Aggiungi un nuovo libro</h2>
-        <form action="gestione_libri.php" method="post">
-            <label for="isbn">ISBN:</label>
-            <input type="text" id="isbn" name="isbn" required>
-
-            <label for="titolo">Titolo:</label>
-            <input type="text" id="titolo" name="titolo" required>
-
-            <label for="trama">Trama:</label>
-            <textarea id="trama" name="trama" required></textarea>
-
-            <label for="casa_editrice">Casa Editrice:</label>
-            <input type="text" id="casa_editrice" name="casa_editrice" required>
-
-            <button type="submit" name="aggiungi">Aggiungi</button>
-        </form>
-
         <h2>Elenco Libri</h2>
         <table>
             <thead>
@@ -114,6 +105,7 @@ close_pg_connection($db);
                     <th>Titolo</th>
                     <th>Trama</th>
                     <th>Casa Editrice</th>
+                    <th>Autori</th>
                     <th>Azioni</th>
                 </tr>
             </thead>
@@ -125,6 +117,7 @@ close_pg_connection($db);
                             <td><?= htmlspecialchars($libro['titolo']) ?></td>
                             <td><?= htmlspecialchars($libro['trama']) ?></td>
                             <td><?= htmlspecialchars($libro['casa_editrice']) ?></td>
+                            <td><?= htmlspecialchars($libro['autori']) ?></td>
                             <td>
                                 <form action="gestione_libri.php" method="post" style="display:inline;">
                                     <input type="hidden" name="isbn" value="<?= htmlspecialchars($libro['isbn']) ?>">
@@ -135,7 +128,7 @@ close_pg_connection($db);
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="5">Nessun libro trovato.</td>
+                        <td colspan="6">Nessun libro trovato.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -144,4 +137,4 @@ close_pg_connection($db);
     <link rel="stylesheet" href="gestione_styles.css">
 </body>
 
-</html>>
+</html>
