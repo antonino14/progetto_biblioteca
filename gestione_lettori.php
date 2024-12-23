@@ -2,7 +2,7 @@
 require_once 'functions.php'; 
 
 session_start();
-// Controllo se il bibliotecario è loggato
+// Verifica autenticazione utente bibliotecario
 authenticateUser('bibliotecario');
 
 // Connessione al database
@@ -36,13 +36,12 @@ if (!$result) {
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
     <title>Gestione Lettori</title>
     <link rel="stylesheet" type="text/css" href="gestione_styles.css">
+
 </head>
 <body>
     <?php include 'sidebar.php'; ?>
-
     <div class="container">
         <header>
             <h1>Lettori Iscritti</h1>
@@ -63,35 +62,26 @@ if (!$result) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    // Query per ottenere tutti i lettori
-                    $query = "SELECT * FROM biblioteca.lettore ORDER BY cf ASC;";
-                    $result = pg_prepare($db, "query_lettori", $query);
-                    $result = pg_execute($db, "query_lettori", array());
-
-                    // Popolamento della tabella con i lettori
-                    while ($row = pg_fetch_assoc($result)) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['cf']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['nome']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['cognome']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['categoria']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['num_ritardi']) . "</td>";
-                        echo "<td>";
-                    ?>
-                    <form method="post" action="gestione_lettori.php">
-                        <input type="hidden" name="cf" value="<?php echo htmlspecialchars($row['cf']); ?>">
-                        <button type="submit" name="reset_ritardi">Azzera Ritardi</button>
-                    </form>
-                    <?php
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
+                    <?php while ($row = pg_fetch_assoc($result)): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['cf']); ?></td>
+                            <td><?php echo htmlspecialchars($row['nome']); ?></td>
+                            <td><?php echo htmlspecialchars($row['cognome']); ?></td>
+                            <td><?php echo htmlspecialchars($row['categoria']); ?></td>
+                            <td><?php echo htmlspecialchars($row['num_ritardi']); ?></td>
+                            <td>
+                                <form method="post" action="gestione_lettori.php">
+                                    <input type="hidden" name="cf" value="<?php echo htmlspecialchars($row['cf']); ?>">
+                                    <button type="submit" name="reset_ritardi">Azzera Ritardi</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
                 </tbody>
             </table>
         </main>
     </div>
+    
 </body>
 </html>
 
