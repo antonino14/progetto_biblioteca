@@ -45,13 +45,16 @@ close_pg_connection($db);
 <head>
     <meta charset="UTF-8">
     <title>Gestione Sedi</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <?php include 'sidebar.php'; ?>
 
     <div class="main-content">
         <h1>Gestione Sedi</h1>
+
+        <form method="GET" action="inserisci_sede.php">
+            <button type="submit">Aggiungi Sede</button>
+        </form>
 
         <?php if (isset($_SESSION['message'])): ?>
             <div class="success-message"> <?= htmlspecialchars($_SESSION['message']) ?> </div>
@@ -84,6 +87,10 @@ close_pg_connection($db);
                                     <input type="hidden" name="id_sede" value="<?= htmlspecialchars($sede['id']) ?>">
                                     <button type="submit" name="azione" value="elimina">Elimina</button>
                                 </form>
+                                <form method="GET" action="inserisci_copia.php">
+                                    <input type="hidden" name="id_sede" value="<?= htmlspecialchars($sede['id']) ?>">
+                                    <button type="submit">Aggiungi Copia</button>
+                                </form>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -97,4 +104,4 @@ close_pg_connection($db);
     </div>
     <link rel="stylesheet" href="gestione_styles.css">
 </body>
-</html
+</html>
