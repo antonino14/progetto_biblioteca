@@ -1,5 +1,4 @@
 <?php
-// Controllo sessione per identificare il tipo di utente
 session_start();
 $user_type = $_SESSION['user_type'] ?? null;
 ?>
