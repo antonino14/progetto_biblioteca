@@ -1,7 +1,5 @@
 <?php 
 
-ini_set("display_errors", "On");
-ini_set("error_reporting", E_ALL);
 include_once('functions.php'); 
 
 // Controllo se il bibliotecario è loggato
@@ -11,7 +9,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['user_type'] !== 'bibliotecario'
     exit();
 }
 
-$conn = connectDB();
+$conn = open_pg_connection(); // Usa open_pg_connection() invece di connectDB()
 
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['id_sede'], $_POST['isbn'])) {
@@ -44,7 +42,7 @@ try {
         // Query per l'inserimento di una copia
         $query_insert_copia = "INSERT INTO biblioteca.copia (id, libro, sede, cod_prestito) VALUES ($1, $2, $3, NULL)";
         $stmt = pg_prepare($conn, "aggiungi_copia", $query_insert_copia);
-        $result = pg_execute($stmt, array($new_cod_copia, $isbn, $id_sede));
+        $result = pg_execute("aggiungi_copia", array($new_cod_copia, $isbn, $id_sede));
 
         if (!$result) {
             throw new Exception("Errore durante l'aggiunta della copia");
@@ -58,7 +56,7 @@ try {
     $_SESSION['error'] = $e->getMessage();
 }
 
-disconnectDB($conn);
+close_pg_connection($conn); // Usa close_pg_connection() invece di disconnectDB()
 ?>
 
 <!DOCTYPE html>
@@ -68,7 +66,6 @@ disconnectDB($conn);
     <link rel="stylesheet" type="text/css" href="css/insert_styles.css">
 </head>
 <body>
-    <?php include 'sidebar.php'; ?>
 
     <div class="main-content">
         <h1>Inserisci Copia</h1>
@@ -88,7 +85,7 @@ disconnectDB($conn);
             <select id="libro" name="isbn" required>
                 <?php
                 // Connessione al database per ottenere i libri esistenti
-                $conn = connectDB();
+                $conn = open_pg_connection(); // Usa open_pg_connection() invece di connectDB()
                 $query_libri = "SELECT isbn, titolo FROM biblioteca.libro ORDER BY titolo ASC";
                 $result = pg_query($conn, $query_libri);
 
@@ -98,13 +95,13 @@ disconnectDB($conn);
                     }
                 }
 
-                disconnectDB($conn);
+                close_pg_connection($conn); // Usa close_pg_connection() invece di disconnectDB()
                 ?>
             </select>
             <button type="submit" name="inserisci_copia">Inserisci Copia</button>
             <a href="gestione_sedi.php" class="torna-indietro">Torna Indietro</a>
         </form>
     </div>
-    <link rel="stylesheet" href="insert_styles.css">
+        <link rel="stylesheet" href="insert_styles.css">
 </body>
 </html>
