@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benvenuto</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Benvenuto alla Biblioteca</title>
+    <link rel="stylesheet" href="welcome_styles.css">
 </head>
+
 <body>
-<header>
-    <h1>Biblioteca Comunale</h1>
-</header>
-<div class="container">
-    <div class="card center">
-        <h2>Benvenuto!</h2>
-        <p>Scegli come accedere:</p>
-        <div class="button-group">
-            <button class="button" onclick="location.href='login_lettore.php'">Accedi come Lettore</button>
-            <button class="button" onclick="location.href='login_bibliotecario.php'">Accedi come Bibliotecario</button>
+    <div class="welcome-container">
+        <h1>Benvenuto alla Biblioteca Comunale</h1>
+        <p>Scegli il tuo portale di accesso:</p>
+        <div class="button-container">
+            <a href="login_lettore.php" class="button">Portale Lettore</a>
+            <a href="login_bibliotecario.php" class="button">Portale Bibliotecario</a>
         </div>
     </div>
-</div>
 </body>
+
 </html>
