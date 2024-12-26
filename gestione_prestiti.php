@@ -1,4 +1,5 @@
 <?php
+
 require_once 'functions.php'; 
 
 // Controllo sessione utente
@@ -70,7 +71,7 @@ try {
     <title>Gestione Prestiti</title>
     <link rel="stylesheet" type="text/css" href="gestione_styles.css">
     <link rel="stylesheet" href="sidebar.css">
-    
+    <script src="sidebar.js" defer></script>
 </head>
 <body>
     <?php include 'sidebar.php'; ?>
