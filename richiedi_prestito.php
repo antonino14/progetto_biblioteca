@@ -53,7 +53,7 @@ close_pg_connection($db);
                     ?>
                 </select>
                 <button type="submit">Conferma Prestito</button>
-                <p><a href="area_prestiti.php">Torna all'area prestiti</a></p>
+                <p><a href="catalogo.php">Torna al catalogo</a></p>
             </form>
         </main>
     </div>
