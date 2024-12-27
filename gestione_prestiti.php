@@ -111,14 +111,14 @@ try {
                             echo "<td>
                                 <form method='post'>
                                     <input type='hidden' name='cod_prestito' value='" . htmlspecialchars($row['cod_prestito']) . "'>
-                                    <input type='number' name='giorni' min='1' required>
-                                    <button type='submit' name='proroga'>Proroga</button>
+                                    <button type='submit' name='restituzione'>Restituzione</button>
                                 </form>
                             </td>";
                             echo "<td>
                                 <form method='post'>
                                     <input type='hidden' name='cod_prestito' value='" . htmlspecialchars($row['cod_prestito']) . "'>
-                                    <button type='submit' name='restituzione'>Restituzione</button>
+                                    <input type='number' name='giorni' min='1' required>
+                                    <button type='submit' name='proroga'>Proroga</button>
                                 </form>
                             </td>";
                             echo "</tr>";
