@@ -100,25 +100,28 @@ ALTER SCHEMA public OWNER TO postgres;
 -- Name: aggiorna_disponibilita(); Type: FUNCTION; Schema: biblioteca; Owner: antonino_ottina
 --
 
-CREATE FUNCTION biblioteca.aggiorna_disponibilita() RETURNS trigger
+CREATE OR REPLACE FUNCTION biblioteca.aggiorna_disponibilita() RETURNS trigger
     LANGUAGE plpgsql
-    AS $$BEGIN
-    -- Controlla che la data di restituzione sia successiva alla data di inizio
-    IF NEW.data_restituzione <= NEW.data_inizio THEN
-        RAISE EXCEPTION 'La data di restituzione deve essere successiva alla data di inizio del prestito';
-    END IF;
-
+    AS $$
+BEGIN
     -- La copia del libro torna disponibile rimuovendo il codice prestito
     UPDATE biblioteca.copia SET cod_prestito = NULL WHERE cod_prestito = OLD.cod_prestito;
 
     -- Si chiude il prestito settando a FALSE il campo prestito_aperto
     UPDATE biblioteca.prestito SET prestito_aperto = FALSE WHERE cod_prestito = OLD.cod_prestito;
-    RETURN OLD;
-END;$$;
 
+    -- Se la data di restituzione è successiva alla data di fine prestito, incrementa i ritardi
+    IF NEW.data_restituzione > NEW.data_fine THEN
+        UPDATE biblioteca.lettore
+        SET num_ritardi = num_ritardi + 1
+        WHERE CF = NEW.lettore;
+    END IF;
+
+    RETURN OLD;
+END;
+$$;
 
 ALTER FUNCTION biblioteca.aggiorna_disponibilita() OWNER TO antonino_ottina;
-
 --
 -- Name: check_max_prestiti(); Type: FUNCTION; Schema: biblioteca; Owner: antonino_ottina
 --
