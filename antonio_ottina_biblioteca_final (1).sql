@@ -633,14 +633,6 @@ INSERT INTO biblioteca.copia VALUES('C00037', '9780451524935', 'S00004',  'P0008
 INSERT INTO biblioteca.copia VALUES('C00038', '9780439139601', 'S00005',  'P00084');
 INSERT INTO biblioteca.copia VALUES('C00039', '9780439139601', 'S00006',  NULL);
 
--- Creazione della sequenza per il codice prestito
-CREATE SEQUENCE biblioteca.cod_prestito_seq START 1;
-
--- Modifica della tabella prestito per utilizzare la sequenza
-ALTER TABLE biblioteca.prestito ALTER COLUMN cod_prestito SET DEFAULT nextval('biblioteca.cod_prestito_seq'::regclass);
-
--- Aggiorna i valori esistenti per utilizzare la sequenza
-UPDATE biblioteca.prestito SET cod_prestito = 'P' || LPAD(nextval('biblioteca.cod_prestito_seq')::text, 5, '0');
 
 --
 -- Data for Name: lettore; Type: TABLE DATA; Schema: biblioteca; Owner: antonino_ottina
@@ -696,29 +688,29 @@ INSERT INTO biblioteca.libro VALUES ('9780062872335', 'Springfield Confidential'
 --
 
 
-INSERT INTO biblioteca.prestito VALUES ('P00004', '2024-01-04', '2024-01-18', NULL, true, 'CF00000000000004');
-INSERT INTO biblioteca.prestito VALUES ('P00006', '2024-01-06', '2024-01-20', NULL, true, 'CF00000000000006');
-INSERT INTO biblioteca.prestito VALUES ('P00007', '2024-01-07', '2024-01-21', NULL, true, 'CF00000000000007');
-INSERT INTO biblioteca.prestito VALUES ('P00010', '2024-01-10', '2024-01-24', NULL, true, 'CF00000000000010');
-INSERT INTO biblioteca.prestito VALUES ('P00011', '2024-01-11', '2024-01-25', NULL, true, 'CF00000000000011');
-INSERT INTO biblioteca.prestito VALUES ('P00013', '2024-01-13', '2024-01-27', NULL, true, 'CF00000000000013');
-INSERT INTO biblioteca.prestito VALUES ('P00014', '2024-01-14', '2024-01-28', NULL, true, 'CF00000000000014');
-INSERT INTO biblioteca.prestito VALUES ('P00015', '2024-01-15', '2024-01-29', NULL, true, 'CF00000000000015');
-INSERT INTO biblioteca.prestito VALUES ('P00017', '2024-01-17', '2024-01-31', NULL, true, 'CF00000000000002');
-INSERT INTO biblioteca.prestito VALUES ('P00019', '2024-01-19', '2024-02-02', NULL, true, 'CF00000000000004');
-INSERT INTO biblioteca.prestito VALUES ('P00025', '2024-07-10', '2024-08-09', NULL, true, 'CF00000000000016');
-INSERT INTO biblioteca.prestito VALUES ('P00002', '2024-01-02', '2024-01-16', NULL, true, 'CF00000000000002');
-INSERT INTO biblioteca.prestito VALUES ('P00012', '2024-01-12', '2024-01-26', NULL, true, 'CF00000000000012');
-INSERT INTO biblioteca.prestito VALUES ('P00018', '2024-01-18', '2024-02-01', NULL, true, 'CF00000000000003');
+INSERT INTO biblioteca.prestito VALUES ('P00004', '2024-01-04', '2024-01-18', NULL, false, 'CF00000000000004');
+INSERT INTO biblioteca.prestito VALUES ('P00006', '2024-01-06', '2024-01-20', NULL, false, 'CF00000000000006');
+INSERT INTO biblioteca.prestito VALUES ('P00007', '2024-01-07', '2024-01-21', NULL, false, 'CF00000000000007');
+INSERT INTO biblioteca.prestito VALUES ('P00010', '2024-01-10', '2024-01-24', NULL, false, 'CF00000000000010');
+INSERT INTO biblioteca.prestito VALUES ('P00011', '2024-01-11', '2024-01-25', NULL, false, 'CF00000000000011');
+INSERT INTO biblioteca.prestito VALUES ('P00013', '2024-01-13', '2024-01-27', NULL, false, 'CF00000000000013');
+INSERT INTO biblioteca.prestito VALUES ('P00014', '2024-01-14', '2024-01-28', NULL, false, 'CF00000000000014');
+INSERT INTO biblioteca.prestito VALUES ('P00015', '2024-01-15', '2024-01-29', NULL, false, 'CF00000000000015');
+INSERT INTO biblioteca.prestito VALUES ('P00017', '2024-01-17', '2024-01-31', NULL, false, 'CF00000000000002');
+INSERT INTO biblioteca.prestito VALUES ('P00019', '2024-01-19', '2024-02-02', NULL, false, 'CF00000000000004');
+INSERT INTO biblioteca.prestito VALUES ('P00025', '2024-07-10', '2024-08-09', NULL, false, 'CF00000000000016');
+INSERT INTO biblioteca.prestito VALUES ('P00002', '2024-01-02', '2024-01-16', NULL, false, 'CF00000000000002');
+INSERT INTO biblioteca.prestito VALUES ('P00012', '2024-01-12', '2024-01-26', NULL, false, 'CF00000000000012');
+INSERT INTO biblioteca.prestito VALUES ('P00018', '2024-01-18', '2024-02-01', NULL, false, 'CF00000000000003');
 INSERT INTO biblioteca.prestito VALUES ('P00003', '2024-01-03', '2024-01-17', '2024-01-20', false, 'CF00000000000003');
 INSERT INTO biblioteca.prestito VALUES ('P00008', '2024-01-08', '2024-01-22', '2024-01-27', false, 'CF00000000000008');
 INSERT INTO biblioteca.prestito VALUES ('P00005', '2024-01-05', '2024-01-19', '2024-01-22', false, 'CF00000000000005');
 INSERT INTO biblioteca.prestito VALUES ('P00021', '2024-06-14', '2024-07-03', '2024-07-06', false, 'CF00000000000016');
-INSERT INTO biblioteca.prestito VALUES ('P00020', '2024-06-15', '2024-07-14', NULL, true, 'CF00000000000005');
-INSERT INTO biblioteca.prestito VALUES ('P00001', '2024-01-01', '2024-03-15', NULL, true, 'CF00000000000001');
+INSERT INTO biblioteca.prestito VALUES ('P00020', '2024-06-15', '2024-07-14', NULL, false, 'CF00000000000005');
+INSERT INTO biblioteca.prestito VALUES ('P00001', '2024-01-01', '2024-03-15', NULL, false, 'CF00000000000001');
 INSERT INTO biblioteca.prestito VALUES ('P00009', '2024-01-09', '2024-01-23', '2024-07-07', false, 'CF00000000000009');
-INSERT INTO biblioteca.prestito VALUES ('P00024', '2024-07-07', '2024-08-12', NULL, true, 'CF00000000000016');
-INSERT INTO biblioteca.prestito VALUES ('P00022', '2024-07-06', '2024-08-25', NULL, true, 'CF00000000000016');
+INSERT INTO biblioteca.prestito VALUES ('P00024', '2024-07-07', '2024-08-12', NULL, false, 'CF00000000000016');
+INSERT INTO biblioteca.prestito VALUES ('P00022', '2024-07-06', '2024-08-25', NULL, false, 'CF00000000000016');
 INSERT INTO biblioteca.prestito VALUES ('P00016', '2024-01-16', '2024-01-30', '2024-07-10', false, 'CF00000000000001');
 INSERT INTO biblioteca.prestito VALUES ('P00023', '2024-07-07', '2024-08-14', '2024-07-10', false, 'CF00000000000016');
 
