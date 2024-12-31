@@ -288,12 +288,16 @@ ALTER TABLE biblioteca.autore OWNER TO antonino_ottina;
 --
 
 CREATE VIEW biblioteca.catalogo AS
-SELECT
-    NULL::character(13) AS isbn,
-    NULL::character varying(100) AS titolo,
-    NULL::text AS trama,
-    NULL::character varying(100) AS casa_editrice,
-    NULL::text AS autori;
+SELECT l.isbn,
+    l.titolo,
+    l.trama,
+    l.casa_editrice,
+    string_agg(concat(a.nome, ' ', a.cognome), ', '::text) AS autori
+   FROM libro l
+     LEFT JOIN scritto s ON l.isbn = s.libro
+     LEFT JOIN autore a ON s.autore = a.id
+  GROUP BY l.isbn
+  ORDER BY l.titolo;
 
 
 ALTER TABLE biblioteca.catalogo OWNER TO antonino_ottina;
