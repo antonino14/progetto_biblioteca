@@ -288,17 +288,18 @@ ALTER TABLE biblioteca.autore OWNER TO antonino_ottina;
 --
 
 CREATE VIEW biblioteca.catalogo AS
-SELECT l.isbn,
+
+CREATE OR REPLACE VIEW biblioteca.catalogo AS
+ SELECT l.isbn,
     l.titolo,
     l.trama,
     l.casa_editrice,
     string_agg(concat(a.nome, ' ', a.cognome), ', '::text) AS autori
-   FROM libro l
-     LEFT JOIN scritto s ON l.isbn = s.libro
-     LEFT JOIN autore a ON s.autore = a.id
+   FROM ((biblioteca.libro l
+     LEFT JOIN biblioteca.scritto s ON ((l.isbn = s.libro)))
+     LEFT JOIN biblioteca.autore a ON ((s.autore = a.id)))
   GROUP BY l.isbn
   ORDER BY l.titolo;
-
 
 ALTER TABLE biblioteca.catalogo OWNER TO antonino_ottina;
 
@@ -890,17 +891,6 @@ ALTER TABLE ONLY biblioteca.utente_lettore
 -- Name: catalogo _RETURN; Type: RULE; Schema: biblioteca; Owner: antonino_ottina
 --
 
-CREATE OR REPLACE VIEW biblioteca.catalogo AS
- SELECT l.isbn,
-    l.titolo,
-    l.trama,
-    l.casa_editrice,
-    string_agg(concat(a.nome, ' ', a.cognome), ', '::text) AS autori
-   FROM ((biblioteca.libro l
-     LEFT JOIN biblioteca.scritto s ON ((l.isbn = s.libro)))
-     LEFT JOIN biblioteca.autore a ON ((s.autore = a.id)))
-  GROUP BY l.isbn
-  ORDER BY l.titolo;
 
 
 --
