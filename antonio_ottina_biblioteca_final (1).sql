@@ -163,7 +163,7 @@ CREATE FUNCTION biblioteca.check_ritardi() RETURNS trigger
     LANGUAGE plpgsql
     AS $$BEGIN
     IF (SELECT num_ritardi FROM biblioteca.lettore WHERE CF = NEW.lettore) >= 5 THEN
-        RAISE INFO 'Prestito non concesso!!! Il lettore ha ha troppi ritardi all''attivo';
+        RAISE EXCEPTION 'Prestito non concesso!!! Il lettore ha ha troppi ritardi all''attivo';
         RETURN NULL;
     ELSE 
         RETURN NEW;
