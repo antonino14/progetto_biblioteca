@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <button type="submit">Accedi</button>
         </form>
+        <a href="cambia_password.php" class="change-password-button">Cambia Password</a>
     </div>
 </body>
 </html>
