@@ -73,7 +73,6 @@ footer {
     position: fixed;
     height: 100%;
     padding-top: 20px;
-    overflow-y: auto;
 }
 
 .sidebar a {
@@ -88,9 +87,8 @@ footer {
 }
 
 .main-content {
-    margin-left: 260px;
+    margin-left: 250px;
     padding: 20px;
     background-color: #f4f4f4;
     min-height: 100vh;
-    overflow: hidden; 
 }
