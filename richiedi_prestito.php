@@ -1,7 +1,7 @@
 <?php
 ini_set("display_errors", "On");
 ini_set("error_reporting", E_ALL);
-require_once 'functions.php'; // Inclusione del file functions.php
+require_once 'functions.php'; 
 
 // Controllo se il lettore è loggato
 session_start();
