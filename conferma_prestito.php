@@ -1,7 +1,7 @@
 <?php
 ini_set("display_errors", "On");
 ini_set("error_reporting", E_ALL);
-include_once('functions.php'); // Assicurati che il percorso del file sia corretto
+include_once('functions.php'); 
 
 // Controllo se il lettore è loggato
 session_start();
@@ -14,32 +14,18 @@ $cf = $_SESSION['cf_lettore'];
 // Connessione al database
 $db = open_pg_connection();
 
-// Ottieni l'ultimo codice prestito
-$query = "SELECT cod_prestito FROM biblioteca.prestito ORDER BY cod_prestito DESC LIMIT 1";
-$result = pg_prepare($db, "query_last_cod_prestito", $query);
-$result = pg_execute($db, "query_last_cod_prestito", array());
-
-if (!$result) {
-    throw new Exception('Errore durante la ricerca dell\'ultimo codice prestito: ' . pg_last_error($db));
-}
-
-$row = pg_fetch_assoc($result);
-$last_cod_prestito = $row ? $row['cod_prestito'] : null;
-
-// Incrementa il numero
-if ($last_cod_prestito) {
-    $last_number = intval(substr($last_cod_prestito, 1)); // rimuove la 'P' e converte in int
-    $new_number = $last_number + 1;
-} else {
-    $new_number = 1; // primo prestito
-}
-
-// Genera il nuovo codice prestito
-$new_cod_prestito = 'P' . str_pad($new_number, 5, '0', STR_PAD_LEFT);
-
 // Recupera i dati dal modulo
 $isbn = $_POST['isbn'];
 $id_sede = $_POST['sede'];
+
+// Genera un nuovo codice prestito unico
+$query = "SELECT 'P' || LPAD((COALESCE(MAX(SUBSTR(cod_prestito, 2)::INTEGER), 0) + 1)::TEXT, 5, '0') AS new_cod_prestito FROM biblioteca.prestito";
+$result = pg_query($db, $query);
+if (!$result) {
+    throw new Exception("Errore durante la generazione del nuovo codice prestito: " . pg_last_error($db));
+}
+$row = pg_fetch_assoc($result);
+$new_cod_prestito = $row['new_cod_prestito'];
 
 // Avvia una transazione
 pg_query($db, "BEGIN");
@@ -65,8 +51,8 @@ try {
     $result = pg_prepare($db, "query_prestito", $query);
     $result = pg_execute($db, "query_prestito", array($new_cod_prestito, $cf));
 
-    if (pg_affected_rows($result) == 0) {
-        throw new Exception("Errore durante l'inserimento del prestito. Controlla se hai raggiunto il numero massimo di prestiti");
+    if (!$result) {
+        throw new Exception("Errore durante l'inserimento del prestito: " . pg_last_error($db));
     }
 
     // Associa il prestito alla copia del libro
@@ -83,7 +69,12 @@ try {
 } catch (Exception $e) {
     // Rollback della transazione in caso di errore
     pg_query($db, "ROLLBACK");
-    $error_message = $e->getMessage();
+    // Gestisci il messaggio di errore
+    if (strpos($e->getMessage(), 'Numero massimo di prestiti raggiunto per questo lettore') !== false) {
+        $error_message = "Hai raggiunto il numero massimo di prestiti. Non puoi richiedere ulteriori prestiti.";
+    } else {
+        $error_message = $e->getMessage();
+    }
 }
 
 // Chiusura della connessione al database
