@@ -38,7 +38,6 @@ if (!$result) {
 <head>
     <title>Gestione Lettori</title>
     <link rel="stylesheet" type="text/css" href="gestione_styles.css">
-
 </head>
 <body>
     <?php include 'sidebar.php'; ?>
@@ -81,7 +80,6 @@ if (!$result) {
             </table>
         </main>
     </div>
-    
 </body>
 </html>
 
