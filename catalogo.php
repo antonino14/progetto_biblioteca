@@ -32,46 +32,47 @@ if (!$result) {
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <?php include 'sidebar.php'; ?>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalogo</title>
-    <link rel="stylesheet" href="catalogo_styles.css"> 
+    <link rel="stylesheet" href="gestione_styles.css"> 
 </head>
 <body>
-    <main>
-        <h1>Catalogo Libri</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>ISBN</th>
-                    <th>Titolo</th>
-                    <th>Trama</th>
-                    <th>Casa Editrice</th>
-                    <th>Autori</th>
-                    <th>Richiedi Prestito</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = pg_fetch_assoc($result)): ?>
+    <?php include 'sidebar.php'; ?>
+    <div class="main-content">
+        <main>
+            <h1>Catalogo Libri</h1>
+            <table>
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($row['isbn']); ?></td>
-                        <td><?php echo htmlspecialchars($row['titolo']); ?></td>
-                        <td><?php echo htmlspecialchars($row['trama']); ?></td>
-                        <td><?php echo htmlspecialchars($row['casa_editrice']); ?></td>
-                        <td><?php echo htmlspecialchars($row['autori']); ?></td>
-                        <td>
-                            <form action="richiedi_prestito.php" method="get">
-                                <input type="hidden" name="isbn" value="<?php echo htmlspecialchars($row['isbn']); ?>">
-                                <button type="submit">Richiedi Prestito</button>
-                            </form>
-                        </td>
+                        <th>ISBN</th>
+                        <th>Titolo</th>
+                        <th>Trama</th>
+                        <th>Casa Editrice</th>
+                        <th>Autori</th>
+                        <th>Richiedi Prestito</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </main>
+                </thead>
+                <tbody>
+                    <?php while ($row = pg_fetch_assoc($result)): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['isbn']); ?></td>
+                            <td><?php echo htmlspecialchars($row['titolo']); ?></td>
+                            <td><?php echo htmlspecialchars($row['trama']); ?></td>
+                            <td><?php echo htmlspecialchars($row['casa_editrice']); ?></td>
+                            <td><?php echo htmlspecialchars($row['autori']); ?></td>
+                            <td>
+                                <form action="richiedi_prestito.php" method="get">
+                                    <input type="hidden" name="isbn" value="<?php echo htmlspecialchars($row['isbn']); ?>">
+                                    <button type="submit">Richiedi Prestito</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </main>
+    </div>
 </body>
 </html>
 
