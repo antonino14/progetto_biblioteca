@@ -29,7 +29,11 @@ if (!$check_row['exists']) {
 try {
     // Gestione restituzione prestito
     if (isset($_POST['restituzione']) && isset($_POST['cod_prestito'])) {
-        $query = "UPDATE biblioteca.prestito SET data_restituzione = CURRENT_DATE WHERE cod_prestito = $1;";
+        // Inizializza una transazione
+        pg_query($db, "BEGIN");
+
+        // Aggiorna data_restituzione e prestito_aperto
+        $query = "UPDATE biblioteca.prestito SET data_restituzione = CURRENT_DATE, prestito_aperto = FALSE WHERE cod_prestito = $1 RETURNING *;";
         $result = pg_prepare($db, "fine_prestito", $query);
         if (!$result) {
             throw new Exception("Errore nella preparazione della query: " . pg_last_error($db));
@@ -38,6 +42,9 @@ try {
         if (!$result) {
             throw new Exception("Errore durante la chiusura del prestito: " . pg_last_error($db));
         } else {
+            // Chiamare il trigger aggiorna_disponibilita qui
+            // Si presuppone che il trigger sia già associato alla tabella, quindi verrà eseguito automaticamente
+            pg_query($db, "COMMIT");
             echo "<script>alert('Prestito concluso con successo!');</script>";
         }
     }
@@ -60,6 +67,8 @@ try {
         }
     }
 } catch (Exception $e) {
+    // Rollback della transazione in caso di errore
+    pg_query($db, "ROLLBACK");
     echo "<script>alert('" . $e->getMessage() . "');</script>";
 }
 ?>
