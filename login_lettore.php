@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_type'] = 'lettore';
         $_SESSION['cf_lettore'] = $cf_lettore;
 
-        header("Location: area_prestiti.php");
+        header("Location: catalogo.php");
         exit();
     } else {
         $error = "Email o password errati.";
