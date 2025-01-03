@@ -1,15 +1,17 @@
 <?php 
+
 require_once 'functions.php';
 
 // Connessione al database
-$conn = open_pg_connection();
+ $conn = open_pg_connection();
 
-// Messaggi
+
+// Messaggi di feedback
 $success = $error = '';
 
 // Verifica se il form è stato inviato
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // validazione input
+    // Sanitizzazione e validazione input
     $cf = trim($_POST['cf']);
     $nome = htmlspecialchars(trim($_POST['nome']));
     $cognome = htmlspecialchars(trim($_POST['cognome']));
