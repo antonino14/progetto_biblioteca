@@ -1,5 +1,6 @@
 <?php 
 
+
 include_once('functions.php'); 
 
 // Controllo se il bibliotecario è loggato
@@ -102,6 +103,6 @@ close_pg_connection($conn); // Usa close_pg_connection() invece di disconnectDB(
             <a href="gestione_sedi.php" class="torna-indietro">Torna Indietro</a>
         </form>
     </div>
-        <link rel="stylesheet" href="insert_styles.css">
+    <link rel="stylesheet" href="insert_styles.css">
 </body>
 </html>
